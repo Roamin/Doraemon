@@ -16,9 +16,9 @@ queue.load( [], 5, ( lookbookPhoto, next ) => {
 
     wget( url, distPath ).then( () => {
         next()
+        console.log( 'Remains: ', queue.length )
     } ).catch( ( error ) => {
         queue.push( lookbookPhoto )
-        log( error, queue.length, length, archive + ' ' + url )
         next()
     } )
 } ).finish( () => {
