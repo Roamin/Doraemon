@@ -12,8 +12,8 @@ class Queue {
         return this
     }
 
-    reload ( ...args ) {
-        this.push( args )
+    reload ( list ) {
+        this.push( list )
         this._parallel()
 
         return this
@@ -46,13 +46,13 @@ class Queue {
         } )
     }
 
-    push ( ...args ) {
+    push ( args ) {
         this.list.push( ...args )
 
         return this
     }
 
-    unshift ( ...args ) {
+    unshift ( args ) {
         this.list.unshift( ...args )
 
         return this

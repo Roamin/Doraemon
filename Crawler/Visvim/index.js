@@ -6,14 +6,13 @@ const wget = require( './utils/wget' )
 
 const ORIGIN = 'https://visvim.tv'
 const DIST = path.join( __dirname, 'dist' )
+const LATEST_ARCHIVES_ENTRY = 'https://visvim.tv/lookbook/'
 const queue = new Queue()
 
 queue.load( [], 5, ( lookbookPhoto, next ) => {
     const { archive, url } = lookbookPhoto
     const filename = path.basename( url )
-    const distPath = path.join( DIST, filename )
-
-    console.log( distPath )
+    const distPath = path.join( DIST, archive, filename )
 
     wget( url, distPath ).then( () => {
         next()
@@ -26,7 +25,7 @@ queue.load( [], 5, ( lookbookPhoto, next ) => {
     console.log( 'done' )
 } )
 
-const pageCrawler = new Crawler( {
+const archivesCrawler = new Crawler( {
     timeout: 15 * 1000,
     retries: 3,
     retryTimeout: 10 * 1000,
@@ -35,32 +34,48 @@ const pageCrawler = new Crawler( {
             console.error( error )
         } else {
             const $ = res.$
-            const $currentLookbook = $( '.lookbook-top-cover-item a' )
             const $archives = $( '.archives-item-title a' )
-            const detailList = []
+            const archiveList = [LATEST_ARCHIVES_ENTRY]
 
-            $currentLookbook.each( function () {
-                const $this = $( this )
-
-                detailList.push( `${ORIGIN}${$this.attr( 'href' )}` )
-            } )
             $archives.each( function () {
                 const $this = $( this )
 
-                detailList.push( `${ORIGIN}${$this.attr( 'href' )}` )
+                archiveList.push( `${ORIGIN}${$this.attr( 'href' )}` )
             } )
 
-            console.log( detailList )
-
-            loadDetail( detailList, () => {
-                done()
-            } )
+            console.log( '\n===>\tarchiveList: ', archiveList, '\n<===\n' )
+            loadArchiveCrawler( archiveList )
             done()
         }
     }
 } )
 
-const detailCrawler = new Crawler( {
+const archiveCrawler = new Crawler( {
+    timeout: 15 * 1000,
+    retries: 3,
+    retryTimeout: 10 * 1000,
+    callback ( error, res, done ) {
+        if ( error ) {
+            console.error( error )
+        } else {
+            const $ = res.$
+            const $covers = $( '.lookbook-top-cover-item a' )
+            const lookbookList = []
+
+            $covers.each( function () {
+                const $this = $( this )
+
+                lookbookList.push( `${ORIGIN}${$this.attr( 'href' )}` )
+            } )
+
+            console.log( '\n===>\tlookbookList: ', lookbookList, '\n<===\n' )
+            loadLookbookPhotoCrawler( lookbookList )
+            done()
+        }
+    }
+} )
+
+const lookbookPhotoCrawler = new Crawler( {
     timeout: 15 * 1000,
     retries: 3,
     retryTimeout: 10 * 1000,
@@ -71,24 +86,22 @@ const detailCrawler = new Crawler( {
             const $ = res.$
             const $images = $( '.lookbook-detail-photo-img img' )
             const title = $( '.contents-title' ).text().trim()
-            const lookbookPhotoList = []
-
-            console.log( $images.length )
+            const photoList = []
 
             $images.each( function () {
                 const $this = $( this )
 
-                lookbookPhotoList.push( {
+                photoList.push( {
                     archive: title,
                     url: `${ORIGIN}${$this.attr( 'src' )}`
                 } )
             } )
 
+            console.log( '\n===>\tphotoList: ', photoList, '\n<===\n' )
             if ( queue.length === 0 ) {
-                console.log( lookbookPhotoList )
-                queue.reload( lookbookPhotoList )
+                queue.reload( photoList )
             } else {
-                queue.push( lookbookPhotoList )
+                queue.push( photoList )
             }
 
             done()
@@ -96,25 +109,19 @@ const detailCrawler = new Crawler( {
     }
 } )
 
-detailCrawler.on( 'schedule', function ( options ) {
-    console.log( '\tstart ', options.uri )
-} )
-
-function loadPage () {
-    const url = `https://visvim.tv/lookbook/`
-
-    pageCrawler.queue( url )
+function loadArchivesCrawler ( list ) {
+    archivesCrawler.queue( list )
 }
 
-function loadDetail ( detailList, cb ) {
-    detailCrawler.queue( detailList )
-
-    detailCrawler.once( 'drain', cb )
+function loadArchiveCrawler ( list ) {
+    archiveCrawler.queue( list )
 }
 
-loadPage()
+function loadLookbookPhotoCrawler ( list ) {
+    lookbookPhotoCrawler.queue( list )
+}
 
-// detailCrawler.queue( 'https://visvim.tv/lookbook/fw19-20/wmv/' )
+loadArchivesCrawler( LATEST_ARCHIVES_ENTRY )
 
 // 监听全局错误
 process.on( 'unhandledRejection', ( error ) => {
