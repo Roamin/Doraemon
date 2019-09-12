@@ -18,4 +18,4 @@
 
 とっても大好き ドラエもん
 
-![](README.jpg)
+![](Doraemon.jpg)
