@@ -1,4 +1,4 @@
-Get visvim Lookbook
+Get VISVIM Lookbook
 
 ## Usage
 
