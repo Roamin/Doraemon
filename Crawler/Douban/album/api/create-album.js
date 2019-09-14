@@ -9,7 +9,7 @@ const config = require( '../config' )
  */
 
 const DEFAULT_FORM_DATA = {
-    ck: 'dxcD', // 不知道是啥
+    ck: config.ck, // 不知道是啥
     album_name: '', // 相册名称
     album_intro: '', // 相册描述
     author_tags: '', // 相册 tag，逗号分割 'tag1,tag2'
@@ -22,7 +22,7 @@ const DEFAULT_FORM_DATA = {
 }
 
 function createAlbum ( formData ) {
-    const formDataStr = qs.stringify( Object.assign( DEFAULT_FORM_DATA, formData ) )
+    const formDataStr = qs.stringify( Object.assign( {}, DEFAULT_FORM_DATA, formData ) )
 
     return new Promise( resolve => {
         request( {
@@ -35,12 +35,16 @@ function createAlbum ( formData ) {
                 return resolve( [error, null] )
             }
 
-            const location = response.caseless.get( 'location' )
+            if ( response.statusCode === 302 ) {
+                const match = response.caseless.get( 'location' ).match( /\/photos\/album\/(\d+)/ )
 
-            if ( /\/photos\/album\/\d+/.test( location ) ) {
-                const albumId = location.match( /\/photos\/album\/(\d+)/ )[1]
+                if ( match ) {
+                    const albumId = match[1]
 
-                resolve( [null, albumId] )
+                    resolve( [null, albumId] )
+                } else {
+                    resolve( [new Error( response.caseless.get( 'location' ) ), null] )
+                }
             } else {
                 resolve( [new Error( body ), null] )
             }
