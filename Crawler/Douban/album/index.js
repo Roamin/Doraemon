@@ -31,6 +31,8 @@ async function uploadLook ( lookbookDirs = [] ) {
         return createAlbumErr
     }
 
+    await sleep( 3000 )
+
     const [uploadPhotosToAlbumErr, uploadRes] = await api.uploadPhotosToAlbum( albumId, lookbookPhotos )
 
     if ( uploadPhotosToAlbumErr ) {
@@ -41,7 +43,7 @@ async function uploadLook ( lookbookDirs = [] ) {
 
     console.log( 'success', uploadRes )
 
-    await sleep( parseInt( Math.random() * 3000 ) )
+    await sleep( 3000 )
 
     uploadLook( lookbookDirs )
 }

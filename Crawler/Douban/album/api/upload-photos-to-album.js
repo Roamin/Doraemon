@@ -47,7 +47,7 @@ function addPhotoDraft ( albumId, filePath ) {
             return resolve( [getUploadAuthTokenErr, null] )
         }
 
-        await sleep( parseInt( Math.random() * 3000 ) )
+        await sleep( 10000 )
 
         request.post( {
             url: 'https://www.douban.com/j/photos/addphoto_draft',
@@ -96,7 +96,7 @@ function autoSave ( albumId, filesPath ) {
             }
         } )
 
-        await sleep( parseInt( Math.random() * 3000 ) )
+        await sleep( 10000 )
 
         request( {
             url: `https://www.douban.com/j/photos/autosave`,
@@ -130,7 +130,7 @@ function uploadPhotosToAlbum ( albumId, filesPath ) {
             return resolve( [err, null] )
         }
 
-        await sleep( parseInt( Math.random() * 3000 ) )
+        await sleep( 10000 )
 
         request( {
             url: `https://www.douban.com/photos/album/${albumId}/upload`,
