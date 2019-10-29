@@ -1,0 +1,38 @@
+@import "variables";
+
+@import "common";
+
+html,
+body {
+    height: 100%;
+}
+
+body {
+    position: relative;
+
+    .btn {
+        $width: $g-btn-width;
+        $height: $g-btn-height / 2;
+
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        margin-top: -$height / 2;
+        margin-left: -$width / 2;
+
+        width: $width;
+        height: $height;
+        line-height: $height;
+        text-align: center;
+
+        font-size: $height / 2;
+        color: #fff;
+        text-transform: uppercase;
+        background: url("../img/btn.png") left top;
+
+        &:hover {
+            color: #fff;
+            background-position: left bottom;
+        }
+    }
+}

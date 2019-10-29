@@ -1,0 +1,26 @@
+{
+  "name": "flavour",
+  "version": "0.0.1",
+  "description": "A SCSS Mixins library",
+  "main": "scss/_mixins.scss",
+  "dependencies": {
+    "gulp": "^3.9.1"
+  },
+  "devDependencies": {
+    "gulp": "^3.9.1",
+    "gulp-sass": "^3.1.0"
+  },
+  "scripts": {
+    "test": "gulp"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/RoamIn/flavour.git"
+  },
+  "author": "Live",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/RoamIn/flavour/issues"
+  },
+  "homepage": "https://github.com/RoamIn/flavour#readme"
+}

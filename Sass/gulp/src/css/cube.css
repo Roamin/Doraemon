@@ -1,0 +1,100 @@
+@font-face { font-family: RalewayRegular; src: url(../fonts/raleway-regular.woff) format("woff"); }
+
+@font-face { font-family: RalewayMedium; src: url(../fonts/raleway-medium.woff) format("woff"); }
+
+@font-face { font-family: RalewaySemiBold; src: url(../fonts/raleway-semibold.woff) format("woff"); }
+
+@font-face { font-family: RalewayBold; src: url(../fonts/raleway-bold.woff) format("woff"); }
+
+@font-face { font-family: RalewayHeavy; src: url(../fonts/raleway-heavy.woff) format("woff"); }
+
+body { font-family: RalewayMedium, Helvetica, sans-serif; font-size: 16px; line-height: 1.5; }
+
+body, p, h3 { margin: 0; }
+
+ul { margin: 0; padding: 0; }
+
+li { list-style: none; }
+
+a { text-decoration: none; }
+
+main { display: flex; height: 100vh; justify-content: center; align-items: center; perspective: 1600px; }
+
+main .m-cube { margin: 0 60px; user-select: none; transform: rotateX(-33.5deg) rotateY(0); transform-style: preserve-3d; animation: rotateY 6s linear infinite; }
+
+main .m-cube li { text-align: center; }
+
+main .m-cube .top { background: rgba(126, 169, 232, 0.8); }
+
+main .m-cube .bottom { background: rgba(126, 232, 169, 0.8); }
+
+main .m-cube .left { background: rgba(169, 126, 232, 0.8); }
+
+main .m-cube .right { background: rgba(169, 232, 126, 0.8); }
+
+main .m-cube .front { background: rgba(232, 126, 169, 0.8); }
+
+main .m-cube .back { background: rgba(232, 169, 126, 0.8); }
+
+main .cube { position: relative; width: 160px; height: 160px; }
+
+main .cube li { position: absolute; width: 160px; height: 160px; }
+
+main .cube .front { transform: translateZ(80px); }
+
+main .cube .back { transform: rotateX(-180deg) translateZ(80px); }
+
+main .cube .right { transform: rotateY(90deg) translateZ(80px); }
+
+main .cube .left { transform: rotateY(-90deg) translateZ(80px); }
+
+main .cube .top { transform: rotateX(90deg) translateZ(80px); }
+
+main .cube .top::after { background-color: rgba(152, 186, 237, 0.5); }
+
+main .cube .bottom { transform: rotateX(-90deg) translateZ(80px); }
+
+main .cube li { line-height: 160px; }
+
+main .cube-sm { position: relative; width: 80px; height: 80px; }
+
+main .cube-sm li { position: absolute; width: 80px; height: 80px; }
+
+main .cube-sm .front { transform: translateZ(40px); }
+
+main .cube-sm .back { transform: rotateX(-180deg) translateZ(40px); }
+
+main .cube-sm .right { transform: rotateY(90deg) translateZ(40px); }
+
+main .cube-sm .left { transform: rotateY(-90deg) translateZ(40px); }
+
+main .cube-sm .top { transform: rotateX(90deg) translateZ(40px); }
+
+main .cube-sm .top::after { background-color: rgba(152, 186, 237, 0.5); }
+
+main .cube-sm .bottom { transform: rotateX(-90deg) translateZ(40px); }
+
+main .cube-sm li { line-height: 80px; }
+
+main .cube-lg { position: relative; width: 240px; height: 240px; }
+
+main .cube-lg li { position: absolute; width: 240px; height: 240px; }
+
+main .cube-lg .front { transform: translateZ(120px); }
+
+main .cube-lg .back { transform: rotateX(-180deg) translateZ(120px); }
+
+main .cube-lg .right { transform: rotateY(90deg) translateZ(120px); }
+
+main .cube-lg .left { transform: rotateY(-90deg) translateZ(120px); }
+
+main .cube-lg .top { transform: rotateX(90deg) translateZ(120px); }
+
+main .cube-lg .top::after { background-color: rgba(152, 186, 237, 0.5); }
+
+main .cube-lg .bottom { transform: rotateX(-90deg) translateZ(120px); }
+
+main .cube-lg li { line-height: 240px; }
+
+@keyframes rotateY { 0% { transform: rotateX(-33.5deg) rotateY(0deg); }
+  100% { transform: rotateX(-33.5deg) rotateY(360deg); } }

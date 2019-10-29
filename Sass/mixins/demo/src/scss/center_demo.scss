@@ -1,0 +1,28 @@
+@charset "UTF-8";
+
+@import "common";
+
+main {
+  width: 100vw;
+  height: 100vh;
+
+  text-align: center;
+  background-color: #ccc;
+}
+
+section {
+  width: 50%;
+  height: 50%;
+  background-color: #fefefe;
+  border-radius: 8px;
+
+  @include vh-center();
+  @include vertical-center();
+}
+
+img {
+  height: 80%;
+  border-radius: 50%;
+
+  vertical-align: middle;
+}

@@ -1,0 +1,89 @@
+@mixin pmd($opts) {
+    $config: map_merge((
+            offset-x: 0,
+            offset-y: 0,
+            gap-x: 0,
+            gap-y: 0
+    ), $opts);
+
+    $cols: map_get($config, cols);
+    $rows: map_get($config, rows);
+    $width: map_get($config, width);
+    $height: map_get($config, height);
+    $gap-x: map_get($config, gap-x);
+    $gap-y: map_get($config, gap-y);
+    $offset-x: map_get($config, offset-x);
+    $offset-y: map_get($config, offset-y);
+    $path: map_get($config, path);
+
+    position: relative;
+
+    .prize {
+        position: absolute;
+        width: $width;
+        height: $height;
+        background-repeat: no-repeat;
+        background-image: url($path);
+    }
+
+    // if 3 x 3
+    // t1 t2 t3 r1
+    // l3       r2
+    // l2       r3
+    // l1 b3 b2 b1
+    $x-len: $cols - 1;
+    $y-len: $rows - 1;
+
+    // top
+    $top-end: ($cols - 1) * 1 + ($rows - 1) * 0;
+    // right
+    $right-end: ($cols - 1) * 1 + ($rows - 1) * 1;
+    // bottom
+    $bottom-end: ($cols - 1) * 2 + ($rows - 1) * 1;
+    // left
+    $left-end: ($cols - 1) * 2 + ($rows - 1) * 2;
+
+    @for $i from 1 through $x-len {
+        $top: 0;
+        $left: ($width + $gap-x) * ($i - 1);
+
+        .prize-#{ $i } {
+            top: $top + $offset-y;
+            left: $left + $offset-x;
+            background-position: $left * -1 $top * -1;
+        }
+    }
+
+    @for $i from 1 through $y-len {
+        $top: ($height + $gap-y) * ($i - 1);
+        $left: ($width + $gap-x) * ($cols - 1);
+
+        .prize-#{ $i + $top-end } {
+            top: $top + $offset-y;
+            left: $left + $offset-x;
+            background-position: $left * -1 $top * -1;
+        }
+    }
+
+    @for $i from 1 through $x-len {
+        $top: ($height + $gap-y) * ($rows - 1);
+        $left: ($width + $gap-x) * ($cols - $i);
+
+        .prize-#{ $i + $right-end } {
+            top: $top + $offset-y;
+            left: $left + $offset-x;
+            background-position: $left * -1 $top * -1;
+        }
+    }
+
+    @for $i from 1 through $y-len {
+        $top: ($height + $gap-y) * ($rows - $i);
+        $left: 0;
+
+        .prize-#{ $i + $bottom-end } {
+            top: $top + $offset-y;
+            left: $left + $offset-x;
+            background-position: $left * -1 $top * -1;
+        }
+    }
+}

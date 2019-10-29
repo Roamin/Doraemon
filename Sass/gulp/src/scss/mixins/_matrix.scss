@@ -1,0 +1,40 @@
+@mixin matrix($opts) {
+    // merge default
+    $config: map_merge((
+            gap-x: 5px,
+            gap-y: 5px,
+            img-ext: 'jpg'
+    ), $opts);
+
+    $class-name: map_get($config, class-name);
+    $img-path: map_get($config, img-path);
+    $img-ext: map_get($config, img-ext);
+
+    $width: map_get($config, width);
+    $height: map_get($config, height);
+
+    $gap-x: map_get($config, gap-x);
+    $gap-y: map_get($config, gap-y);
+
+    $cols: map_get($config, cols);
+    $rows: map_get($config, rows);
+
+    $len: $cols * $rows;
+
+    width: ($width + $gap-x) * $cols - $gap-x;
+    height: ($height + $gap-y) * $rows - $gap-y;
+
+    .prize {
+        position: absolute;
+        width: $width;
+        height: $height;
+    }
+
+    @for $i from 0 to $len {
+        .#{ $class-name }-#{ $i + 1 } {
+            top: floor($i / $cols)* ($height + $gap-y);
+            left: $i % $cols * ($width + $gap-x);
+            background: url("#{ $img-path + ($i + 1)}.#{$img-ext}");
+        }
+    }
+}

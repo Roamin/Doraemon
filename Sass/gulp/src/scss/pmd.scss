@@ -1,0 +1,109 @@
+@import "mixins";
+@import "common";
+
+main {
+    display: flex;
+    height: 100vh;
+    align-items: center;
+    justify-content: center;
+}
+
+.m-pmd {
+    position: relative;
+    width: 580px;
+    height: 573px;
+    background: url("../img/pmd/box.jpg") center no-repeat;
+
+    .start-btn {
+        $w: 148px;
+        $h: 148px;
+
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        margin-top: - $h / 2;
+        margin-left: - $w / 2;
+        width: $w;
+        height: $h;
+        background: url("../img/pmd/start.jpg") no-repeat;
+    }
+
+    @include pmd((
+            cols: 3,
+            rows: 3,
+            width: 148px,
+            height: 148px,
+            offset-x: 61px,
+            offset-y: 53px,
+            gap-x: 4px,
+            gap-y: 4px,
+            path: "../img/pmd/prize-plate.jpg"
+    ));
+}
+
+//.m-pmd {
+//    position: relative;
+//    width: 290px;
+//    height: 286px;
+//    background: url("../img/pmd/box-sm.jpg") center no-repeat;
+//
+//    .start-btn {
+//        $w: 74px;
+//        $h: 74px;
+//
+//        position: absolute;
+//        top: 50%;
+//        left: 50%;
+//        margin-top: - $h / 2;
+//        margin-left: - $w / 2;
+//        width: $w;
+//        height: $h;
+//        background: url("../img/pmd/start-sm.jpg") no-repeat;
+//    }
+//
+//    @include pmd((
+//            cols: 3,
+//            rows: 3,
+//            width: 74px,
+//            height: 74px,
+//            offset-x: 30px,
+//            offset-y: 26px,
+//            gap-x: 2px,
+//            gap-y: 2px,
+//            path: "../img/pmd/prize-plate-sm.jpg"
+//    ));
+//}
+
+//.m-pmd {
+//    position: relative;
+//    width: 345px;
+//    height: 345px;
+//    background: url("../img/pmd/box-12.jpg") center no-repeat;
+//
+//    .start-btn {
+//        $w: 148px;
+//        $h: 148px;
+//
+//        position: absolute;
+//        top: 50%;
+//        left: 50%;
+//        margin-top: - $h / 2;
+//        margin-left: - $w / 2;
+//        width: $w;
+//        height: $h;
+//        background: url("../img/pmd/start.jpg") no-repeat;
+//    }
+//
+//    @include pmd((
+//            cols: 4,
+//            rows: 4,
+//            width: 80px,
+//            height: 80px,
+//            offset-x: 5px,
+//            offset-y: 5px,
+//            gap-x: 5px,
+//            gap-y: 5px,
+//            path: "../img/pmd/prize-plate-12.jpg"
+//    ));
+//}
+

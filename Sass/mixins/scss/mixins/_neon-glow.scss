@@ -1,0 +1,33 @@
+@charset "utf-8";
+
+// 霓虹灯闪烁
+// $baseColor: 默认颜色;
+// $startColor: 起始颜色;
+// $endColor: 结束颜色;
+// $glowTime: 闪烁时间;
+// @include neon(#fff, rgb(0, 135, 211), rgb(233, 54, 40), .3s);
+
+@mixin neon-glow($baseColor, $startColor, $endColor, $glowTime) {
+  color: $baseColor;
+
+  :nth-child(odd) {
+    -webkit-animation: glowOn $glowTime ease-in infinite;
+  }
+
+  :nth-child(even) {
+    -webkit-animation: glowOff $glowTime ease-in infinite;
+  }
+
+  @-webkit-keyframes glowOn {
+    0% {
+      color: $startColor;
+      text-shadow: 0 0 15px;
+    }
+  }
+  @-webkit-keyframes glowOff {
+    100% {
+      color: $endColor;
+      text-shadow: 0 0 15px;
+    }
+  }
+}

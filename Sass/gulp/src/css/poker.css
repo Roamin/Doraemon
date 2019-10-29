@@ -1,0 +1,103 @@
+@font-face { font-family: RalewayRegular; src: url(../fonts/raleway-regular.woff) format("woff"); }
+
+@font-face { font-family: RalewayMedium; src: url(../fonts/raleway-medium.woff) format("woff"); }
+
+@font-face { font-family: RalewaySemiBold; src: url(../fonts/raleway-semibold.woff) format("woff"); }
+
+@font-face { font-family: RalewayBold; src: url(../fonts/raleway-bold.woff) format("woff"); }
+
+@font-face { font-family: RalewayHeavy; src: url(../fonts/raleway-heavy.woff) format("woff"); }
+
+body { font-family: RalewayMedium, Helvetica, sans-serif; font-size: 16px; line-height: 1.5; }
+
+body, p, h3 { margin: 0; }
+
+ul { margin: 0; padding: 0; }
+
+li { list-style: none; }
+
+a { text-decoration: none; }
+
+.poker-list { display: grid; grid-template-columns: repeat(8, 1fr); grid-gap: 20px; margin: 10px auto; width: max-content; }
+
+.poker { padding: 5px; width: 120px; height: 176px; border: 1px solid #ececec; border-radius: 4px; }
+
+.poker-1 { background: url("../img/poker/1.jpg") center no-repeat; }
+
+.poker-2 { background: url("../img/poker/2.jpg") center no-repeat; }
+
+.poker-3 { background: url("../img/poker/3.jpg") center no-repeat; }
+
+.poker-4 { background: url("../img/poker/4.jpg") center no-repeat; }
+
+.poker-5 { background: url("../img/poker/5.jpg") center no-repeat; }
+
+.poker-6 { background: url("../img/poker/6.jpg") center no-repeat; }
+
+.poker-7 { background: url("../img/poker/7.jpg") center no-repeat; }
+
+.poker-8 { background: url("../img/poker/8.jpg") center no-repeat; }
+
+.poker-9 { background: url("../img/poker/9.jpg") center no-repeat; }
+
+.poker-10 { background: url("../img/poker/10.jpg") center no-repeat; }
+
+.poker-11 { background: url("../img/poker/11.jpg") center no-repeat; }
+
+.poker-12 { background: url("../img/poker/12.jpg") center no-repeat; }
+
+.poker-13 { background: url("../img/poker/13.jpg") center no-repeat; }
+
+.poker-14 { background: url("../img/poker/14.jpg") center no-repeat; }
+
+.poker-15 { background: url("../img/poker/15.jpg") center no-repeat; }
+
+.poker-16 { background: url("../img/poker/16.jpg") center no-repeat; }
+
+.poker-17 { background: url("../img/poker/17.jpg") center no-repeat; }
+
+.poker-18 { background: url("../img/poker/18.jpg") center no-repeat; }
+
+.poker-19 { background: url("../img/poker/19.jpg") center no-repeat; }
+
+.poker-20 { background: url("../img/poker/20.jpg") center no-repeat; }
+
+.poker-21 { background: url("../img/poker/21.jpg") center no-repeat; }
+
+.poker-22 { background: url("../img/poker/22.jpg") center no-repeat; }
+
+.poker-23 { background: url("../img/poker/23.jpg") center no-repeat; }
+
+.poker-24 { background: url("../img/poker/24.jpg") center no-repeat; }
+
+.poker-25 { background: url("../img/poker/25.jpg") center no-repeat; }
+
+.poker-26 { background: url("../img/poker/26.jpg") center no-repeat; }
+
+.poker-27 { background: url("../img/poker/27.jpg") center no-repeat; }
+
+.poker-28 { background: url("../img/poker/28.jpg") center no-repeat; }
+
+.poker-29 { background: url("../img/poker/29.jpg") center no-repeat; }
+
+.poker-30 { background: url("../img/poker/30.jpg") center no-repeat; }
+
+.poker-31 { background: url("../img/poker/31.jpg") center no-repeat; }
+
+.poker-32 { background: url("../img/poker/32.jpg") center no-repeat; }
+
+.poker-33 { background: url("../img/poker/33.jpg") center no-repeat; }
+
+.poker-34 { background: url("../img/poker/34.jpg") center no-repeat; }
+
+.poker-35 { background: url("../img/poker/35.jpg") center no-repeat; }
+
+.poker-36 { background: url("../img/poker/36.jpg") center no-repeat; }
+
+.poker-37 { background: url("../img/poker/37.jpg") center no-repeat; }
+
+.poker-38 { background: url("../img/poker/38.jpg") center no-repeat; }
+
+.poker-39 { background: url("../img/poker/39.jpg") center no-repeat; }
+
+.poker-40 { background: url("../img/poker/40.jpg") center no-repeat; }

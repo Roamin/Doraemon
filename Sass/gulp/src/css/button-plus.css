@@ -1,0 +1,27 @@
+@font-face { font-family: RalewayRegular; src: url(../fonts/raleway-regular.woff) format("woff"); }
+
+@font-face { font-family: RalewayMedium; src: url(../fonts/raleway-medium.woff) format("woff"); }
+
+@font-face { font-family: RalewaySemiBold; src: url(../fonts/raleway-semibold.woff) format("woff"); }
+
+@font-face { font-family: RalewayBold; src: url(../fonts/raleway-bold.woff) format("woff"); }
+
+@font-face { font-family: RalewayHeavy; src: url(../fonts/raleway-heavy.woff) format("woff"); }
+
+body { font-family: RalewayMedium, Helvetica, sans-serif; font-size: 16px; line-height: 1.5; }
+
+body, p, h3 { margin: 0; }
+
+ul { margin: 0; padding: 0; }
+
+li { list-style: none; }
+
+a { text-decoration: none; }
+
+html, body { height: 100%; }
+
+body { position: relative; }
+
+body .btn { position: absolute; top: 50%; left: 50%; margin-top: -50px; margin-left: -138.5px; width: 277px; height: 100px; line-height: 100px; text-align: center; font-size: 50px; color: #fff; text-transform: uppercase; background: url("../img/btn.png") left top; }
+
+body .btn:hover { color: #fff; background-position: left bottom; }

@@ -1,0 +1,245 @@
+@font-face {
+  font-family: RalewayRegular;
+  src: url(../fonts/raleway-regular.woff) format("woff");
+}
+@font-face {
+  font-family: RalewayMedium;
+  src: url(../fonts/raleway-medium.woff) format("woff");
+}
+@font-face {
+  font-family: RalewaySemiBold;
+  src: url(../fonts/raleway-semibold.woff) format("woff");
+}
+@font-face {
+  font-family: RalewayBold;
+  src: url(../fonts/raleway-bold.woff) format("woff");
+}
+@font-face {
+  font-family: RalewayHeavy;
+  src: url(../fonts/raleway-heavy.woff) format("woff");
+}
+body {
+  font-family: RalewayMedium, Helvetica, sans-serif;
+  font-size: 16px;
+  line-height: 1.5;
+}
+
+body,
+p,
+h3 {
+  margin: 0;
+}
+
+ul {
+  margin: 0;
+  padding: 0;
+}
+
+li {
+  list-style: none;
+}
+
+a {
+  text-decoration: none;
+}
+
+main {
+  display: flex;
+  min-height: 100vh;
+  align-items: center;
+  justify-content: center;
+}
+
+section {
+  position: relative;
+  margin: 10px;
+  border: 10px solid #2f2f2f;
+  background-color: #2f2f2f;
+}
+
+.cols-1-1 {
+  width: 80px;
+  height: 80px;
+}
+.cols-1-1 .prize {
+  position: absolute;
+  width: 80px;
+  height: 80px;
+}
+.cols-1-1 .prize-1 {
+  top: 0px;
+  left: 0px;
+  background: url("../img/matrix/1.jpg");
+}
+
+.cols-2-1 {
+  width: 165px;
+  height: 80px;
+}
+.cols-2-1 .prize {
+  position: absolute;
+  width: 80px;
+  height: 80px;
+}
+.cols-2-1 .prize-1 {
+  top: 0px;
+  left: 0px;
+  background: url("../img/matrix/1.jpg");
+}
+.cols-2-1 .prize-2 {
+  top: 0px;
+  left: 85px;
+  background: url("../img/matrix/2.jpg");
+}
+
+.cols-2-2 {
+  width: 165px;
+  height: 165px;
+}
+.cols-2-2 .prize {
+  position: absolute;
+  width: 80px;
+  height: 80px;
+}
+.cols-2-2 .prize-1 {
+  top: 0px;
+  left: 0px;
+  background: url("../img/matrix/1.jpg");
+}
+.cols-2-2 .prize-2 {
+  top: 0px;
+  left: 85px;
+  background: url("../img/matrix/2.jpg");
+}
+.cols-2-2 .prize-3 {
+  top: 85px;
+  left: 0px;
+  background: url("../img/matrix/3.jpg");
+}
+.cols-2-2 .prize-4 {
+  top: 85px;
+  left: 85px;
+  background: url("../img/matrix/4.jpg");
+}
+
+.cols-3-1 {
+  width: 250px;
+  height: 80px;
+}
+.cols-3-1 .prize {
+  position: absolute;
+  width: 80px;
+  height: 80px;
+}
+.cols-3-1 .prize-1 {
+  top: 0px;
+  left: 0px;
+  background: url("../img/matrix/1.jpg");
+}
+.cols-3-1 .prize-2 {
+  top: 0px;
+  left: 85px;
+  background: url("../img/matrix/2.jpg");
+}
+.cols-3-1 .prize-3 {
+  top: 0px;
+  left: 170px;
+  background: url("../img/matrix/3.jpg");
+}
+
+.cols-3-2 {
+  width: 250px;
+  height: 165px;
+}
+.cols-3-2 .prize {
+  position: absolute;
+  width: 80px;
+  height: 80px;
+}
+.cols-3-2 .prize-1 {
+  top: 0px;
+  left: 0px;
+  background: url("../img/matrix/1.jpg");
+}
+.cols-3-2 .prize-2 {
+  top: 0px;
+  left: 85px;
+  background: url("../img/matrix/2.jpg");
+}
+.cols-3-2 .prize-3 {
+  top: 0px;
+  left: 170px;
+  background: url("../img/matrix/3.jpg");
+}
+.cols-3-2 .prize-4 {
+  top: 85px;
+  left: 0px;
+  background: url("../img/matrix/4.jpg");
+}
+.cols-3-2 .prize-5 {
+  top: 85px;
+  left: 85px;
+  background: url("../img/matrix/5.jpg");
+}
+.cols-3-2 .prize-6 {
+  top: 85px;
+  left: 170px;
+  background: url("../img/matrix/6.jpg");
+}
+
+.cols-3-3 {
+  width: 250px;
+  height: 250px;
+}
+.cols-3-3 .prize {
+  position: absolute;
+  width: 80px;
+  height: 80px;
+}
+.cols-3-3 .prize-1 {
+  top: 0px;
+  left: 0px;
+  background: url("../img/matrix/1.jpg");
+}
+.cols-3-3 .prize-2 {
+  top: 0px;
+  left: 85px;
+  background: url("../img/matrix/2.jpg");
+}
+.cols-3-3 .prize-3 {
+  top: 0px;
+  left: 170px;
+  background: url("../img/matrix/3.jpg");
+}
+.cols-3-3 .prize-4 {
+  top: 85px;
+  left: 0px;
+  background: url("../img/matrix/4.jpg");
+}
+.cols-3-3 .prize-5 {
+  top: 85px;
+  left: 85px;
+  background: url("../img/matrix/5.jpg");
+}
+.cols-3-3 .prize-6 {
+  top: 85px;
+  left: 170px;
+  background: url("../img/matrix/6.jpg");
+}
+.cols-3-3 .prize-7 {
+  top: 170px;
+  left: 0px;
+  background: url("../img/matrix/7.jpg");
+}
+.cols-3-3 .prize-8 {
+  top: 170px;
+  left: 85px;
+  background: url("../img/matrix/8.jpg");
+}
+.cols-3-3 .prize-9 {
+  top: 170px;
+  left: 170px;
+  background: url("../img/matrix/9.jpg");
+}
+
+/*# sourceMappingURL=matrix.css.map */

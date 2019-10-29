@@ -1,0 +1,83 @@
+@import "mixins";
+@import "common";
+
+main {
+    display: flex;
+    min-height: 100vh;
+    align-items: center;
+    justify-content: center;
+}
+
+section {
+    position: relative;
+    margin: 10px;
+    border: 10px solid #2f2f2f;
+    background-color: #2f2f2f;
+}
+
+.cols-1-1 {
+    @include matrix((
+            class-name: 'prize',
+            img-path: '../img/matrix/',
+            img-ext: 'jpg',
+            cols: 1,
+            rows: 1,
+            width: 80px,
+            height: 80px
+    ));
+}
+
+.cols-2-1 {
+    @include matrix((
+            class-name: 'prize',
+            img-path: '../img/matrix/',
+            cols: 2,
+            rows: 1,
+            width: 80px,
+            height: 80px
+    ));
+}
+
+.cols-2-2 {
+    @include matrix((
+            class-name: 'prize',
+            img-path: '../img/matrix/',
+            cols: 2,
+            rows: 2,
+            width: 80px,
+            height: 80px
+    ));
+}
+
+.cols-3-1 {
+    @include matrix((
+            class-name: 'prize',
+            img-path: '../img/matrix/',
+            cols: 3,
+            rows: 1,
+            width: 80px,
+            height: 80px
+    ));
+}
+
+.cols-3-2 {
+    @include matrix((
+            class-name: 'prize',
+            img-path: '../img/matrix/',
+            cols: 3,
+            rows: 2,
+            width: 80px,
+            height: 80px
+    ));
+}
+
+.cols-3-3 {
+    @include matrix((
+            class-name: 'prize',
+            img-path: '../img/matrix/',
+            cols: 3,
+            rows: 3,
+            width: 80px,
+            height: 80px
+    ));
+}

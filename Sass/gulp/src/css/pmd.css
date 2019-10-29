@@ -1,0 +1,118 @@
+@font-face {
+  font-family: RalewayRegular;
+  src: url(../fonts/raleway-regular.woff) format("woff");
+}
+@font-face {
+  font-family: RalewayMedium;
+  src: url(../fonts/raleway-medium.woff) format("woff");
+}
+@font-face {
+  font-family: RalewaySemiBold;
+  src: url(../fonts/raleway-semibold.woff) format("woff");
+}
+@font-face {
+  font-family: RalewayBold;
+  src: url(../fonts/raleway-bold.woff) format("woff");
+}
+@font-face {
+  font-family: RalewayHeavy;
+  src: url(../fonts/raleway-heavy.woff) format("woff");
+}
+body {
+  font-family: RalewayMedium, Helvetica, sans-serif;
+  font-size: 16px;
+  line-height: 1.5;
+}
+
+body,
+p,
+h3 {
+  margin: 0;
+}
+
+ul {
+  margin: 0;
+  padding: 0;
+}
+
+li {
+  list-style: none;
+}
+
+a {
+  text-decoration: none;
+}
+
+main {
+  display: flex;
+  height: 100vh;
+  align-items: center;
+  justify-content: center;
+}
+
+.m-pmd {
+  position: relative;
+  width: 580px;
+  height: 573px;
+  background: url("../img/pmd/box.jpg") center no-repeat;
+  position: relative;
+}
+.m-pmd .start-btn {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  margin-top: -74px;
+  margin-left: -74px;
+  width: 148px;
+  height: 148px;
+  background: url("../img/pmd/start.jpg") no-repeat;
+}
+.m-pmd .prize {
+  position: absolute;
+  width: 148px;
+  height: 148px;
+  background-repeat: no-repeat;
+  background-image: url("../img/pmd/prize-plate.jpg");
+}
+.m-pmd .prize-1 {
+  top: 53px;
+  left: 61px;
+  background-position: 0px 0;
+}
+.m-pmd .prize-2 {
+  top: 53px;
+  left: 213px;
+  background-position: -152px 0;
+}
+.m-pmd .prize-3 {
+  top: 53px;
+  left: 365px;
+  background-position: -304px 0px;
+}
+.m-pmd .prize-4 {
+  top: 205px;
+  left: 365px;
+  background-position: -304px -152px;
+}
+.m-pmd .prize-5 {
+  top: 357px;
+  left: 365px;
+  background-position: -304px -304px;
+}
+.m-pmd .prize-6 {
+  top: 357px;
+  left: 213px;
+  background-position: -152px -304px;
+}
+.m-pmd .prize-7 {
+  top: 357px;
+  left: 61px;
+  background-position: 0 -304px;
+}
+.m-pmd .prize-8 {
+  top: 205px;
+  left: 61px;
+  background-position: 0 -152px;
+}
+
+/*# sourceMappingURL=pmd.css.map */

@@ -1,0 +1,39 @@
+@mixin cube($size) {
+    position: relative;
+    width: $size;
+    height: $size;
+
+    li {
+        position: absolute;
+        width: $size;
+        height: $size;
+    }
+
+    .front {
+        transform: translateZ($size / 2);
+    }
+
+    .back {
+        transform: rotateX(-180deg) translateZ($size / 2);
+    }
+
+    .right {
+        transform: rotateY(90deg) translateZ($size / 2);
+    }
+
+    .left {
+        transform: rotateY(-90deg) translateZ($size / 2);
+    }
+
+    .top {
+        transform: rotateX(90deg) translateZ($size / 2);
+
+        &::after {
+            background-color: rgba(152, 186, 237, .5);
+        }
+    }
+
+    .bottom {
+        transform: rotateX(-90deg) translateZ($size / 2);
+    }
+}

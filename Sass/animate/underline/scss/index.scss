@@ -1,0 +1,46 @@
+main {
+    display: flex;
+    height: 100vh;
+    align-items: center;
+    justify-content: center;
+}
+
+article {
+    width: 50%;
+}
+
+section {
+    margin-bottom: 15px;
+}
+
+.link {
+    position: relative;
+    color: #3181FF;
+    text-decoration: none;
+
+    &:hover {
+        cursor: pointer;
+        color: #1966CC;
+
+        &:before {
+            visibility: visible;
+            transform: scaleX(1);
+        }
+    }
+
+    &:before {
+        content: "";
+        visibility: hidden;
+
+        position: absolute;
+        left: 0;
+        bottom: 0;
+        width: 100%;
+        height: 1px;
+
+        background-color: #1966CC;
+        transform-origin: left center;
+        transform: scaleX(0);
+        transition: transform .2s ease-in-out 0s;
+    }
+}

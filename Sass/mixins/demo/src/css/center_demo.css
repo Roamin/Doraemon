@@ -1,0 +1,35 @@
+body {
+  margin: 0;
+}
+
+main {
+  width: 100vw;
+  height: 100vh;
+  text-align: center;
+  background-color: #ccc;
+}
+
+section {
+  width: 50%;
+  height: 50%;
+  background-color: #fefefe;
+  border-radius: 8px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+section:before {
+  content: '';
+  display: inline-block;
+  height: 100%;
+  vertical-align: middle;
+}
+
+img {
+  height: 80%;
+  border-radius: 50%;
+  vertical-align: middle;
+}
+
+/*# sourceMappingURL=center_demo.css.map */

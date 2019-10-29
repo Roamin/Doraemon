@@ -1,0 +1,42 @@
+@charset "UTF-8";
+
+@import "common";
+
+.custom-scrollbar {
+    @include custom-scrollbar();
+}
+
+.ms-custom-scrollbar {
+    @include ms-custom-scrollbar();
+}
+
+.fex-custom-scrollbar {
+    @include fex-custom-scrollbar();
+}
+
+section {
+    overflow-x: hidden;
+
+    margin: 25vh auto;
+    width: 50vw;
+    height: 50vh;
+    border: 1px solid #ddd;
+
+    .content {
+        height: 100vh;
+        background: linear-gradient(
+            45deg,
+            rgba(255, 0, 0, 0) 0%,
+            rgba(255, 0, 0, 0.8) 7%,
+            rgba(255, 0, 0, 1) 11%,
+            rgba(255, 0, 0, 1) 12%,
+            rgba(255, 252, 0, 1) 28%,
+            rgba(1, 180, 7, 1) 45%,
+            rgba(0, 234, 255, 1) 60%,
+            rgba(0, 3, 144, 1) 75%,
+            rgba(255, 0, 198, 1) 88%,
+            rgba(255, 0, 198, 0.8) 93%,
+            rgba(255, 0, 198, 0) 100%
+        );
+    }
+}

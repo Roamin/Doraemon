@@ -1,0 +1,81 @@
+@import "mixins";
+@import "common";
+
+main {
+    display: flex;
+    height: 100vh;
+    justify-content: center;
+    align-items: center;
+    perspective: 1600px;
+
+    .m-cube {
+        margin: 0 60px;
+        user-select: none;
+        transform: rotateX(-33.5deg) rotateY(0);
+        transform-style: preserve-3d;
+
+        animation: rotateY 6s linear infinite;
+
+        li {
+            text-align: center;
+        }
+
+        .top {
+            background: rgba(126, 169, 232, .8);
+        }
+        .bottom {
+            background: rgba(126, 232, 169, .8);
+        }
+        .left {
+            background: rgba(169, 126, 232, .8);
+        }
+        .right {
+            background: rgba(169, 232, 126, .8);
+        }
+        .front {
+            background: rgba(232, 126, 169, .8);
+        }
+        .back {
+            background: rgba(232, 169, 126, .8);
+        }
+    }
+
+    .cube {
+        $size: 160px;
+        @include cube($size);
+
+
+        li {
+            line-height: $size;
+        }
+    }
+
+    .cube-sm {
+        $size: 80px;
+        @include cube($size);
+
+
+        li {
+            line-height: $size;
+        }
+    }
+    .cube-lg {
+        $size: 240px;
+        @include cube($size);
+
+
+        li {
+            line-height: $size;
+        }
+    }
+}
+
+@keyframes rotateY {
+    0% {
+        transform: rotateX(-33.5deg) rotateY(0deg);
+    }
+
+    100% {
+        transform: rotateX(-33.5deg) rotateY(360deg);
+    }
+}
