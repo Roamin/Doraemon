@@ -1,35 +1,40 @@
 onmessage = function ( e ) {
     const data = e.data
 
-    console.log( 'start', data )
-
     start( data )
 }
 
-const THREAD_NUM = 3
-const result = {}
-let pendingNum = THREAD_NUM
+const results = {}
+let pendingNum = 0
+let startTime = 0
+let endTime = 0
 
-function storeResult ( event ) {
-    const { i, data } = event.data
+function storeResults ( event ) {
+    const { index, data } = event.data
 
     pendingNum--
-    result[i] = data
+    results[index] = data
 
-    if ( pendingNum <= 0 )
-        postMessage( result )
+    if ( pendingNum <= 0 ) {
+        endTime = performance.now()
+        console.log( 'cost: ', endTime - startTime, ', results length:', results )
+        postMessage( results )
+    }
 }
 
-function start ( data = [] ) {
+function start ( combinationDataList ) {
+    startTime = performance.now()
 
-    for ( let i = 0; i < THREAD_NUM; i += 1 ) {
+    pendingNum = combinationDataList.length
+    combinationDataList.forEach( ( combinationData, index ) => {
         const worker = new Worker( 'core.js' )
 
+
         worker.postMessage( {
-            i,
-            data: data.slice( i * 3, ( i + 1 ) * 3 )
+            index,
+            combinationData
         } )
 
-        worker.onmessage = storeResult
-    }
+        worker.onmessage = storeResults
+    } )
 }

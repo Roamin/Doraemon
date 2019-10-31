@@ -22,7 +22,8 @@ export function factorial ( n ) {
 // [2, 3, 4, 5, 6,]
 // ...
 export default function combination ( arr, num ) {
-    console.log( JSON.stringify( arr ), 'should return ', factorial( arr.length ) / ( factorial( num ) * factorial( arr.length - num ) ) )
+    // console.log( JSON.stringify( arr ), 'should return ', Math.ceil( factorial( arr.length ) / ( factorial( num ) * factorial( arr.length - num ) ) ) )
+
     const results = []
 
     arr.forEach( ( item, index ) => {
@@ -40,8 +41,7 @@ export default function combination ( arr, num ) {
         }
     } )
 
-    console.log( 'results length:', results.length )
-    console.log( JSON.stringify( results, null, 4 ) )
+    return results
 }
 
 function arrangement ( arr, n, result = [] ) {
