@@ -5,7 +5,7 @@
 
 using namespace emscripten;
 
-std::string backpack()
+std::string test()
 {
     int w[5] = {0, 2, 3, 4, 5}; //商品的体积2、3、4、5
     int v[5] = {0, 3, 4, 5, 6}; //商品的价值3、4、5、6
@@ -39,5 +39,5 @@ std::string backpack()
 
 EMSCRIPTEN_BINDINGS(module)
 {
-    function("backpack", &backpack);
+    function("test", &test);
 }
