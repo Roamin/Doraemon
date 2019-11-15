@@ -37,12 +37,13 @@ export default class Calculate {
      * 转化成新的样品数据（重复的完全背包转化成01背包）
      */
     convertSampleList () {
-        this.sample_origin_list.forEach( ( { name, price, weight } ) => {
+        this.sample_origin_list.forEach( ( { name, price, weight, stock } ) => {
+            const max_limit = Math.min( stock, this.MAX_SINGLE_SAMPLE_NUM )
             let repeat_num = Math.floor( this.product_price_max / price )
 
-            repeat_num = repeat_num <= this.MAX_SINGLE_SAMPLE_NUM
+            repeat_num = repeat_num <= max_limit
                 ? repeat_num
-                : this.MAX_SINGLE_SAMPLE_NUM
+                : max_limit
 
             for ( let i = 0; i < repeat_num; i++ ) {
                 this.sample_list.push( {
@@ -74,11 +75,11 @@ export default class Calculate {
             }
 
             return result
-        } );
+        } )
 
         this.sample_list.forEach( ( { name, price, weight }, index ) => {
             for ( let p = 0; p <= this.product_price_max; p++ ) {
-                if ( p == 0 || index == 0 ) {
+                if ( p === 0 || index === 0 ) {
                     this.weight_result[index][p] = 0
                     continue
                 }
@@ -99,8 +100,8 @@ export default class Calculate {
     }
 
     /**
-    * 获取最优解权重和方案坐标
-    */
+     * 获取最优解权重和方案坐标
+     */
     findAllMaxWeightAndPlan () {
         const weight_coordinate_map = {}
 
@@ -114,7 +115,7 @@ export default class Calculate {
 
                 weight_coordinate_map[weight].push( [x, y] )
 
-                this.max_weight = weight > this.max_weight ? weight : this.max_weight;
+                this.max_weight = weight > this.max_weight ? weight : this.max_weight
             } )
         } )
 
@@ -128,13 +129,13 @@ export default class Calculate {
         this.max_weight_plan = []
 
         this.max_weight_coordinate.forEach( item => {
-            let [sample_index, price_index] = item
+            const [sample_index, price_index] = item
 
-            let detail = [[]]
+            const detail = [[]]
 
             this.findOneCoordinatePlanDetail( 0, sample_index, price_index, detail )
 
-            this.max_weight_plan = this.max_weight_plan.concat( detail )
+            if ( detail[0].length > 0 ) this.max_weight_plan = this.max_weight_plan.concat( detail )
         } )
 
         this.max_weight_plan = Array.from( new Set( this.max_weight_plan.map( item => item.join( ',' ) ) ) ).map( item => item.split( ',' ) )
@@ -157,10 +158,8 @@ export default class Calculate {
             // 如果当前行等于上一行，则判断是否是并列级别
             // 否则，就是 节点，保险一点，再加了节点判断
             if ( currentWeight === this.weight_result[x - 1][y] ) {
-
-                // if ( sampleX.price === this.sample_list[x - 1].price && sampleX.weight === this.sample_list[x - 1].weight ) {
                 if ( isNode ) {
-                    let next_router_index = detail.length
+                    const next_router_index = detail.length
 
                     // 拷贝当前，新建一个路径
                     detail[next_router_index] = [...detail[current_route]]
@@ -176,12 +175,14 @@ export default class Calculate {
     }
 
     /**
- * 方案转化成具体样品数据
- */
+     * 方案转化成具体样品数据
+     */
     convertPlanToOriginSample () {
         this.max_weight_sample_plan = []
 
         const plan_key_map = {}
+
+        console.log( JSON.stringify( this.max_weight_plan ) )
 
         this.max_weight_plan.forEach( plan_detail => {
             const plan = {}
@@ -212,113 +213,8 @@ export default class Calculate {
                     plan_key_map[keys] = true
                     this.max_weight_sample_plan.push( plan )
                 }
-
             }
         } )
-    }
-
-    printDynamicPlan ( selector ) {
-        let sampleTableHTML = `
-            <table class="sample-table">
-        `
-
-        this.weight_result.forEach( ( result, index ) => {
-            const sample = this.sample_list[index]
-
-            sampleTableHTML += `
-                <tr>
-                    <th>
-                        <div>${index}(${sample.name || ''} : ${sample.price || ''})</div>
-                    </th>
-                </tr>
-            `
-        } )
-        sampleTableHTML += `
-            </table>
-        `
-
-        let priceTableHTML = `
-            <table class="price-table">
-                <tr>
-                    <th>
-                        <div>x/y</div>
-                    </th>
-        `
-
-        for ( let i = 0; i <= this.product_price_max; i++ ) {
-            priceTableHTML += `<th><div>${i}</div></th>`
-        }
-
-        priceTableHTML += `
-                </tr>
-            </table>
-        `
-
-        let dpTableHTML = `
-            <table class="dp-table">
-        `
-
-        this.weight_result.forEach( ( result, index ) => {
-            dpTableHTML += `<tr>`
-
-            result.forEach( item => {
-                dpTableHTML += `
-                    <td>
-                        <div>${item}</div>
-                    </td>
-                `
-            } )
-
-            dpTableHTML += `</tr>`
-        } )
-
-        dpTableHTML += `
-            </table>
-        `
-
-        selector.innerHTML = `
-            <div class="layout">
-                <div class="layout__header">
-                    <div class="table-wrapper price">
-                        ${priceTableHTML}
-                    </div>
-                </div>
-                <div class="layout__content">
-                    <div class="layout__aside">
-                        <div class="table-wrapper sample">
-                            ${sampleTableHTML}
-                        </div>
-                    </div>
-                    <div class="table-wrapper dp">
-                        ${dpTableHTML}
-                    </div>
-                </div>
-            </div>
-        `
-
-        const priceTable = this.getDOM( selector.querySelector( '.table-wrapper.price' ) )
-        const sampleTable = this.getDOM( selector.querySelector( '.table-wrapper.sample' ) )
-        const dpTable = this.getDOM( selector.querySelector( '.table-wrapper.dp' ) )
-
-        dpTable.dom.onscroll = function () {
-            const vPercent = 1 - ( dpTable.availableScrollHeight - dpTable.dom.scrollTop ) / dpTable.availableScrollHeight
-            const hPercent = 1 - ( dpTable.availableScrollWidth - dpTable.dom.scrollLeft ) / dpTable.availableScrollWidth
-
-            sampleTable.dom.scrollTop = sampleTable.availableScrollHeight * vPercent
-            priceTable.dom.scrollLeft = priceTable.availableScrollWidth * hPercent
-        }
-    }
-
-    getDOM ( dom ) {
-        const { offsetWidth, offsetHeight, scrollWidth, scrollHeight } = dom
-
-        return {
-            dom,
-            offsetHeight,
-            scrollHeight,
-            availableScrollWidth: scrollWidth - offsetWidth,
-            availableScrollHeight: scrollHeight - offsetHeight
-        }
     }
 
     run () {
