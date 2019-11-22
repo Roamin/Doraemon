@@ -5,11 +5,26 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Worker</title>
+    <style>
+        section {
+            padding: 20px;
+        }
+
+        section + section {
+            border-top: 1px dashed #8e8e8e;
+        }
+    </style>
 </head>
 <body>
-    <button id="start">Start</button>
-    <button id="startWorker">Start Worker</button>
-    <div id="result"></div>
+    <section>
+        <button id="startJS">Start JS</button>
+        <button id="startWorker">Start Worker</button>
+        <pre id="result"></pre>
+    </section>
+    <section>
+        <button id="ajax">Ajax</button>
+        <pre id="ajaxResult"></pre>
+    </section>
     <script src="./index.js"></script>
 </body>
 </html>
