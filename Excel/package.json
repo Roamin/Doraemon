@@ -1,0 +1,12 @@
+{
+  "devDependencies": {
+    "parcel": "^2.0.0-alpha.3.2"
+  },
+  "scripts": {
+    "dev": "parcel index.html",
+    "build": "parcel build index.html"
+  },
+  "dependencies": {
+    "xlsx": "^0.15.3"
+  }
+}
