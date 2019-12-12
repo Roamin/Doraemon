@@ -6,6 +6,9 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Excel</title>
     <style>
+        * {
+            box-sizing: border-box;
+        }
         body {
             margin: 0;
         }
@@ -13,32 +16,36 @@
             display: flex;
             flex-direction: column;
             padding: 20px;
-            min-height: 100vh;
+            height: 100vh;
         }
         .result {
+            overflow: hidden;
             flex: auto;
             display: flex;
+            margin-top: 8px;
         }
-        .result > pre {
+        pre {
+            overflow: auto;
             position: relative;
             flex: 1;
+            margin: 0;
             padding: 20px;
             border-radius: 4px;
             background-color: #f0f0f0;
         }
-        .result > pre + pre {
+        pre + pre {
             margin-left: 8px;
         }
         #J_RawResult::after {
             position: absolute;
-            top: 0;
-            left: 0;
+            top: 8px;
+            left: 8px;
             content: "Raw Data";
         }
         #J_Result::after {
             position: absolute;
-            top: 0;
-            left: 0;
+            top: 8px;
+            left: 8px;
             content: "Data";
         }
     </style>

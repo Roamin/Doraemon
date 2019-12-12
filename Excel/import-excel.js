@@ -1,6 +1,53 @@
 import XLSX from 'xlsx'
 
 /**
+ * 验证工作表名称
+ * @param {Object}} workbook 
+ * @param {Array} schemas 
+ */
+function validateSheetNames (workbook, schemas) {
+    // get sheets names and titles
+    const sheetNames = schemas.map(({ name }) => name)
+
+    // validate sheet names
+    if (JSON.stringify(sheetNames) !== JSON.stringify(workbook.SheetNames)) {
+        return new Error('Sheet Names Mismatch!')
+    }
+
+    return null
+}
+
+/**
+ * 验证工作表的标题
+ * @param {Array} result 
+ * @param {Array} schemas 
+ */
+function validateSheetTitles (result, schemas) {
+    const sheetTitles = []
+    const workbookSheetTitles = []
+
+    schemas.forEach(({ schema }, sheetIndex) => {
+        sheetTitles[sheetIndex] = schema.map(({ title }) => title)
+    })
+
+    result.forEach((rows, sheetIndex) => {
+        const titles = []
+
+        for (let i = 0; i < schemas[sheetIndex].schema.length; i++) {
+            titles.push(rows[0][i])
+        }
+
+        workbookSheetTitles.push(titles)
+    })
+
+    if (JSON.stringify(workbookSheetTitles) !== JSON.stringify(sheetTitles)) {
+        return new Error('Sheet Header Titles Mismatch!')
+    }
+
+    return null
+}
+
+/**
  * 清除表格空行、字段前后空白符
  * @param rows
  * @param colLength 每行总列数
@@ -17,23 +64,27 @@ function trimSheetData (rows) {
         }))
 }
 
-// sheets = [
-//     {
-//         name: '用户信息',
-//         columns: [
-//             {
-//                 title: 'ID',
-//                 key: 'id'
-//             },
-//             {
-//                 title: '姓名',
-//                 key: 'username'
-//             }
-//         ]
-//     }
-// ]
-
-export function getRawExcelSheets (file, sheets = []) {
+/**
+ * 获取原始数据
+ * @param {File} file
+ * @param {Array} schemas
+ * schemas = [
+ *   {
+ *       name: '用户信息',
+ *       schema: [
+ *           {
+ *               title: 'ID',
+ *               key: 'id'
+ *           },
+ *           {
+ *               title: '姓名',
+ *               key: 'username'
+ *           }
+ *       ]
+ *  }
+ * ]
+ */
+export function getRawExcelSheets (file, schemas = []) {
     return new Promise(resolve => {
         const reader = new FileReader()
 
@@ -42,22 +93,12 @@ export function getRawExcelSheets (file, sheets = []) {
             const workbook = XLSX.read(fileData, { type: 'array' })
             const result = []
 
-            // get sheets config names and titles
-            const sheetNames = []
-            const sheetHeaderTitles = []
-
-            sheets.forEach(({ name, columns }, sheetIndex) => {
-                sheetNames.push(name)
-
-                sheetHeaderTitles[sheetIndex] = columns.map(({ title }) => title)
-            })
-
             // validate sheet names
-            if (JSON.stringify(sheetNames) !== JSON.stringify(workbook.SheetNames)) {
-                return resolve([new Error('Sheet Names Mismatch!')])
+            const validSheetNamesError = validateSheetNames(workbook, schemas)
+            if (validSheetNamesError) {
+                return resolve([validSheetNamesError])
             }
 
-            const workbookSheetHeaderTitles = []
             workbook.SheetNames.forEach((sheetName, sheetIndex) => {
                 // get sheet
                 const worksheet = workbook.Sheets[sheetName]
@@ -72,17 +113,14 @@ export function getRawExcelSheets (file, sheets = []) {
 
                 rows = trimSheetData(rows)
 
-                const titles = []
-                for (let i = 0; i < sheets[sheetIndex].columns.length; i++) {
-                    titles.push(rows[0][i])
-                }
-                workbookSheetHeaderTitles.push(titles)
                 result.push(rows)
             })
 
+
             // validate sheet titles
-            if (JSON.stringify(workbookSheetHeaderTitles) !== JSON.stringify(sheetHeaderTitles)) {
-                return resolve([new Error('Sheet Header Titles Mismatch!')])
+            const validSheetTitlesError = validateSheetTitles(result, schemas)
+            if (validSheetTitlesError) {
+                return resolve([validSheetTitlesError])
             }
 
             resolve([null, result])
@@ -92,9 +130,14 @@ export function getRawExcelSheets (file, sheets = []) {
     })
 }
 
-export function getExcelSheets (file, sheets) {
+/**
+ * 获取 Excel 数据（变成键值对的形式）
+ * @param {File} file 
+ * @param {Array} schemas 
+ */
+export function getExcelSheets (file, schemas = []) {
     return new Promise(async resolve => {
-        let [error, result] = await getRawExcelSheets(file, sheets)
+        let [error, result] = await getRawExcelSheets(file, schemas)
 
         if (error) {
             return resolve([error])
@@ -107,7 +150,7 @@ export function getExcelSheets (file, sheets) {
                 const item = {}
 
                 // convert each row to Object
-                sheets[sheetIndex].columns.forEach(({ key }, colIndex) => {
+                schemas[sheetIndex].schema.forEach(({ key }, colIndex) => {
                     // key => value
                     item[key] = row[colIndex]
                 })
@@ -119,5 +162,3 @@ export function getExcelSheets (file, sheets) {
         resolve([null, result])
     })
 }
-
-export default getExcelSheets

@@ -1,9 +1,9 @@
 import { getRawExcelSheets, getExcelSheets } from './import-excel'
 
-const sheets = [
+const schemas = [
     {
         name: '用户信息',
-        columns: [
+        schema: [
             {
                 title: 'ID',
                 key: 'id'
@@ -24,7 +24,7 @@ const sheets = [
     },
     {
         name: '城市信息',
-        columns: [
+        schema: [
             {
                 title: 'ID',
                 key: 'id'
@@ -42,17 +42,17 @@ const sheets = [
 ]
 
 async function renderRawSheets (file) {
-    const [err, data] = await getRawExcelSheets(file, sheets)
+    const [err, data] = await getRawExcelSheets(file, schemas)
 
-    if (err) return console.error(err)
+    if (err) return alert(err)
 
     document.getElementById('J_RawResult').innerHTML = JSON.stringify(data, null, 4)
 }
 
 async function renderSheets (file) {
-    const [err, data] = await getExcelSheets(file, sheets)
+    const [err, data] = await getExcelSheets(file, schemas)
 
-    if (err) return console.error(err)
+    if (err) return alert(err)
 
     document.getElementById('J_Result').innerHTML = JSON.stringify(data, null, 4)
 }
