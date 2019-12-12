@@ -50,7 +50,6 @@ function validateSheetTitles (result, schemas) {
 /**
  * 清除表格空行、字段前后空白符
  * @param rows
- * @param colLength 每行总列数
  * @returns {*}
  */
 function trimSheetData (rows) {
