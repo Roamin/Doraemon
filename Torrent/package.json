@@ -1,0 +1,6 @@
+{
+  "dependencies": {
+    "create-torrent": "^4.4.1",
+    "parse-torrent": "^7.0.1"
+  }
+}
