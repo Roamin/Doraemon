@@ -16,15 +16,15 @@ function parseChat (html) {
         const user = $sender.text()
         const content = $content.html()
 
-        console.log(i)
-
-        console.log({
+        messages.push({
             id,
             time,
             user,
             content
         })
     })
+
+    return messages
 }
 
 module.exports = parseChat

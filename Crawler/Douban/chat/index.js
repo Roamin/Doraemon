@@ -1,10 +1,19 @@
 
 const api = require('./api')
+const models = require('./models')
 const sleep = require('./utils/sleep')
 const parseChat = require('./utils/parse-chat')
 
 function saveChat (html) {
-    parseChat(html)
+    return new Promise((resolve) => {
+        const messages = parseChat(html)
+
+        models.Message.bulkCreate(messages).then(() => {
+            resolve([null])
+        }).catch(error => {
+            resolve([error])
+        })
+    })
 }
 
 async function run (start = 0) {
@@ -17,7 +26,11 @@ async function run (start = 0) {
         return console.error(err)
     }
 
-    saveChat(html)
+    const [insertErr] = await saveChat(html)
+
+    if (insertErr) {
+        return console.error(insertErr)
+    }
 
     console.log(start, more)
 
@@ -25,9 +38,9 @@ async function run (start = 0) {
         return console.log('done.')
     }
 
-    await sleep(3000)
+    await sleep(5000)
 
     run(start + 20)
 }
 
-run(7540)
+run()

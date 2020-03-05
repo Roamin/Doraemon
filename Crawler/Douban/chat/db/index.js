@@ -1,28 +1,17 @@
-var mysql = require('mysql');
-var connection = mysql.createConnection({
-    host: 'localhost',
-    user: 'root',
-    password: '52Zllshizhu',
-    database: 'mytest'
-});
+const Sequelize = require('sequelize')
+const { mysql: config } = require('../config')
 
-connection.connect();
+/* 表字段 */
 
+const db = new Sequelize(
+    config.DATABASE, // 数据库名
+    config.USERNAME, // 用户名
+    config.PASSWORD, // 用户密码
+    {
+        dialect: 'mysql', // 数据库使用mysql
+        host: config.HOST, // 数据库服务器ip
+        port: config.MYSQL_PORT // 数据库服务器端口
+    }
+)
 
-insert();
-
-function insert () {
-    connection.query("INSERT INTO `user` (id, name, psw) VALUES (null, '靳建奇', '52Alsdkfj')", function (error, results, fields) {
-        if (!error)
-            console.log('insert : OK');
-    })
-    selectAll();
-
-}
-
-function selectAll () {
-    connection.query('SELECT * FROM `user`', function (error, results, fields) {
-        console.log(results);
-    })
-}
-
+module.exports = db

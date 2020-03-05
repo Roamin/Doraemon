@@ -1,7 +1,7 @@
 const qs = require('querystring')
 const request = require('request')
 
-const config = require('../config')
+const { request: config } = require('../config')
 
 /**
  * 创建相册
@@ -28,6 +28,8 @@ function loadMoreChat (formData) {
 
             if (response.statusCode === 200) {
                 const res = JSON.parse(body)
+
+                console.log(res)
 
                 resolve([null, res])
             } else {
