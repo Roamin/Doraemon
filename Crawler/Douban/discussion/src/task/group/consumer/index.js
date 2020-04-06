@@ -1,6 +1,7 @@
 const Sequelize = require('sequelize')
 const sleep = require('../../../utils/sleep')
 const event = require('../../../utils/event')
+const getUrlParam = require('../../../utils/get-url-param')
 const { service } = require('../../../db')
 const getGroupDiscussions = require('./get-group-discussions')
 
@@ -19,7 +20,7 @@ function filterDiscussions (discussions) {
         let existedTopics = await service.Topic.findAll({
             where: {
                 id: {
-                    [Sequelize.Op.or]: discussions.map(discussion => discussion.url.match(/topic\/(\d+)/)[1])
+                    [Sequelize.Op.or]: discussions.map(discussion => getUrlParam(discussion.url, 'topic'))
                 }
             },
             raw: true
@@ -64,7 +65,7 @@ async function consumer (url, group) {
 
         return discussion
     })
-    const filteredDiscussions = await filterDiscussions(discussions, groupId)
+    const filteredDiscussions = await filterDiscussions(discussions)
 
     // 如果有未存入的数据，则批量插入 discussions
     if (filteredDiscussions.length > 0) {
@@ -81,9 +82,9 @@ async function consumer (url, group) {
 
     // 检测是否有重复
     // 如果是第一轮爬取，则忽略碰到重复数据
-    if ((!hasDuplicate || loops === 0) && res.nextGroup) {
+    if ((!hasDuplicate || loops === 0) && res.next) {
         await sleep(2000)
-        return consumer(res.nextGroup, group)
+        return consumer(res.next, group)
     }
 
     await group.update({

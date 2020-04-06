@@ -30,6 +30,10 @@ const Topic = sequelize.define('topic', {
         type: Sequelize.STRING,
         allowNull: false,
     },
+    text: {
+        type: Sequelize.TEXT,
+        allowNull: false,
+    },
     content: {
         type: Sequelize.TEXT,
         allowNull: false,
@@ -42,7 +46,7 @@ const Topic = sequelize.define('topic', {
         type: Sequelize.INTEGER,
         allowNull: false,
     },
-    saveCount: {
+    collectCount: {
         type: Sequelize.INTEGER,
         allowNull: false,
     },

@@ -1,63 +1,55 @@
-const log = require('../../../utils/log')
 const event = require('../../../utils/event')
 const { service } = require('../../../db')
-const getMagnetFromPage = require('./get-magnet-from-page')
+const getTopicPageInfo = require('./get-topic-page-info')
+const getTopicComments = require('./get-topic-comments')
 
-async function consumer (page) {
+async function consumer (discussion) {
     // 标记正在运行中
-    await page.update({
+    await discussion.update({
         status: 'RUNNING'
     })
 
-    const url = page.get('url')
+    const url = discussion.get('url')
 
-    // 判断是否已经存入
-    // todo
-
-    const [err, res] = await getMagnetFromPage(url)
+    const [errTopic, resTopic] = await getTopicPageInfo(url)
+    const [errTopicComments, topicComments] = await getTopicComments(url)
 
     // 如果处理失败
-    if (err) {
-        await page.update({
+    if (errTopic) {
+        await discussion.update({
             status: 'ERROR',
-            error: err.message
+            error: errTopic.message
+        })
+
+        return
+    }
+    if (errTopicComments) {
+        await discussion.update({
+            status: 'ERROR',
+            error: errTopicComments.message
         })
 
         return
     }
 
-    const categoryId = page.get('categoryId')
-    const magnet = {
-        categoryId,
-        ...res
+    const groupId = discussion.get('groupId')
+    const topic = {
+        groupId,
+        ...resTopic
     }
 
-    const existedMagnet = await service.Magnet.findOne({
-        where: {
-            infoHash: magnet.infoHash
-        }
+    console.log(await service.Topic.create(topic))
+    await service.Comment.create(topicComments)
+
+    event.emit('discussion-worker-message', {
+        status: 'INSERT_TOPIC',
+        message: `insert ${topic.title} with ${topicComments.length} comments`
     })
 
-    if (existedMagnet) {
-        await existedMagnet.update(magnet)
-
-        event.emit('page-worker-message', {
-            status: 'UPDATE_MAGNET',
-            message: `update ${magnet.name}`
-        })
-    } else {
-        await service.Magnet.create(magnet)
-
-        event.emit('page-worker-message', {
-            status: 'INSERT_MAGNET',
-            message: `insert ${magnet.name}`
-        })
-    }
-
-    await page.destroy()
-    event.emit('page-worker-message', {
-        status: 'PAGE_DONE',
-        message: `delete page: ${url}`
+    // await discussion.destroy()
+    event.emit('discussion-worker-message', {
+        status: 'DISCUSSION_DONE',
+        message: `delete discussion: ${url}`
     })
 }
 

@@ -26,7 +26,8 @@ async function loop () {
         status: 'RUNNING'
     })
 
-    const url = group.get('url')
+    const id = group.get('id')
+    const url = `https://www.douban.com/group/${id}/discussion?start=0`
 
     consumer(url, group)
 

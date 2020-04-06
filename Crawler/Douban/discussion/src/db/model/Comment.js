@@ -23,6 +23,14 @@ const Comment = sequelize.define('comment', {
             key: 'id'
         }
     },
+    to: {
+        type: Sequelize.INTEGER,
+        allowNull: false,
+        references: {
+            model: User,
+            key: 'id'
+        }
+    },
     content: {
         type: Sequelize.TEXT,
         allowNull: false,

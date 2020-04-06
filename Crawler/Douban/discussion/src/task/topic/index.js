@@ -5,23 +5,23 @@ const consumer = require('./consumer')
 
 async function loop () {
     // 找一条待处理数据
-    const page = await service.Page.findOne({
+    const discussion = await service.Discussion.findOne({
         where: {
             status: 'PENDING'
         }
     })
 
     // 如果没有，停止
-    if (!page) {
-        event.emit('page-worker-message', {
-            status: 'NO_MORE_PAGE',
-            message: 'No more page.'
+    if (!discussion) {
+        event.emit('discussion-worker-message', {
+            status: 'NO_MORE_DISCUSSION',
+            message: 'No more discussion.'
         })
 
         return
     }
 
-    consumer(page)
+    consumer(discussion)
 
     await sleep(2000)
     loop()

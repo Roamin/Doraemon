@@ -3,17 +3,12 @@ const consumer = require('./consumer')
 
 async function loop () {
     // 找一条待处理数据
-    const page = await service.Page.findOne({
-        where: {
-            url: 'http://www.xxizhan.com/thread-1930-1-1.html'
-            // status: 'PENDING'
-        }
-    })
+    const discussion = await service.Discussion.findOne()
 
     // 如果没有，停止
-    if (!page) return console.log('Page initialization completed.')
+    if (!discussion) return console.log('Discussion initialization completed.')
 
-    consumer(page)
+    consumer(discussion)
 }
 
 loop()

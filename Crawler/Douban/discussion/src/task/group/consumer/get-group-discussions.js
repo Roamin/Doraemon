@@ -1,17 +1,16 @@
 const request = require('request')
 const cheerio = require('cheerio')
 const { request: config } = require('../../../config')
-const getFullUrl = require('../../../utils/get-full-url')
 
 function getGroupDiscussions (url) {
 	return new Promise(resolve => {
 		request({
 			url,
 			method: 'GET',
-			headers: config.headers
+			headers: config.headers()
 		}, (error, response, body) => {
 			if (error) {
-				return resolve([error, null])
+				return resolve([error])
 			}
 
 			if (response.statusCode === 200) {
@@ -27,14 +26,12 @@ function getGroupDiscussions (url) {
 
 					discussions.push({
 						title: $this.text().trim(),
-						url: getFullUrl(href, url)
+						url: href
 					})
 				})
 
 				if ($next.length > 0) {
-					const href = $next.attr('href')
-
-					next = getFullUrl(href, url)
+					next = $next.attr('href')
 				}
 
 				resolve([null, {
@@ -42,7 +39,7 @@ function getGroupDiscussions (url) {
 					discussions
 				}])
 			} else {
-				resolve([new Error(body), null])
+				resolve([new Error(body)])
 			}
 		})
 	})
