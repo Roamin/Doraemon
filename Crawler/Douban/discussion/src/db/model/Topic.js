@@ -11,7 +11,7 @@ const Topic = sequelize.define('topic', {
         primaryKey: true
     },
     author: {
-        type: Sequelize.INTEGER,
+        type: Sequelize.STRING,
         allowNull: false,
         references: {
             model: User,
@@ -19,7 +19,7 @@ const Topic = sequelize.define('topic', {
         }
     },
     groupId: {
-        type: Sequelize.INTEGER,
+        type: Sequelize.STRING,
         allowNull: false,
         references: {
             model: Group,

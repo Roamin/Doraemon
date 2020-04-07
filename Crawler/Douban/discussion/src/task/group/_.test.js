@@ -73,21 +73,12 @@ async function members () {
     // 如果没有，停止
     if (!group) return console.log('No more group.')
 
-    // 标记正在运行中
-    await group.update({
-        status: 'RUNNING'
-    })
-
     const id = group.get('id')
     const url = `https://www.douban.com/group/${id}/members`
 
-    const [err, res] = await getGroupMembers(url)
+    const result = await getGroupMembers(url)
 
-    if (err) {
-        console.log(err)
-    } else {
-        console(res)
-    }
+    console.log(result)
 }
 
 // reset()

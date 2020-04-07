@@ -1,5 +1,5 @@
 module.exports = {
-    DATABASE: 'douban_group', // 使用哪个数据库
+    DATABASE: 'douban', // 使用哪个数据库
     USERNAME: 'YSH', // 用户名
     PASSWORD: '123456', // 口令
     HOST: 'localhost', // 主机名

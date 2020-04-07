@@ -5,7 +5,7 @@ const { service } = require('../../../db')
 const getUrlParam = require('../../../utils/get-url-param')
 const sleep = require('../../../utils/sleep')
 
-function getMembers (url, resolve, memberCount = 0) {
+function getMembers (resolve, url, memberCount = 0) {
 	request({
 		url,
 		method: 'GET',
@@ -17,7 +17,7 @@ function getMembers (url, resolve, memberCount = 0) {
 
 		if (response.statusCode === 200) {
 			const $ = cheerio.load(body)
-			const $members = $('.member-list li')
+			const $members = $('.member-list').last().find('li')
 			const $next = $('.paginator .next a')
 			const members = []
 
@@ -44,12 +44,14 @@ function getMembers (url, resolve, memberCount = 0) {
 
 			memberCount += members.length
 
+			console.log(`insert ${members.length} members`)
+
 			if ($next.length > 0) {
 				const next = $next.attr('href')
 
-				await sleep(1000 + Math.random() * 1000)
+				await sleep(10000 + Math.random() * 20000)
 
-				return getMembers(next, resolve, memberCount)
+				return getMembers(resolve, next, memberCount)
 			}
 
 			resolve([null, memberCount])
@@ -61,7 +63,7 @@ function getMembers (url, resolve, memberCount = 0) {
 
 function getGroupMembers (url) {
 	return new Promise(resolve => {
-		getMembers(url, resolve)
+		getMembers(resolve, url)
 	})
 }
 

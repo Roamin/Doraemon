@@ -16,7 +16,7 @@ const Comment = sequelize.define('comment', {
         primaryKey: true
     },
     author: {
-        type: Sequelize.INTEGER,
+        type: Sequelize.STRING,
         allowNull: false,
         references: {
             model: User,
@@ -24,7 +24,7 @@ const Comment = sequelize.define('comment', {
         }
     },
     to: {
-        type: Sequelize.INTEGER,
+        type: Sequelize.STRING,
         allowNull: false,
         references: {
             model: User,

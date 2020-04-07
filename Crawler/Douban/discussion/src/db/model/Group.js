@@ -3,7 +3,7 @@ const sequelize = require('../sequelize')
 
 const Group = sequelize.define('group', {
     id: {
-        type: Sequelize.INTEGER,
+        type: Sequelize.STRING,
         allowNull: false,
         unique: true,
         primaryKey: true

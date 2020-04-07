@@ -24,7 +24,7 @@ const Discussion = sequelize.define('discussion', {
         allowNull: true
     },
     groupId: {
-        type: Sequelize.INTEGER,
+        type: Sequelize.STRING,
         allowNull: false,
         references: {
             model: Group,
