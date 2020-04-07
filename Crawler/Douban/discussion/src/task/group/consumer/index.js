@@ -69,7 +69,7 @@ async function consumer (url, group) {
 
     // 如果有未存入的数据，则批量插入 discussions
     if (filteredDiscussions.length > 0) {
-        await service.Discussion.create(filteredDiscussions)
+        await service.Discussion.bulkCreate(filteredDiscussions)
 
         event.emit('group-worker-message', {
             status: 'CREATE_DISCUSSION',

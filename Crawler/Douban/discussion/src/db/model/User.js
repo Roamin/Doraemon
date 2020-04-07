@@ -14,7 +14,8 @@ const User = sequelize.define('user', {
     },
     avatar: {
         type: Sequelize.STRING,
-        allowNull: false
+        allowNull: true,
+        defaultValue: 'https://img3.doubanio.com/icon/user_normal_f.jpg'
     }
 }, {
     timestamps: false,

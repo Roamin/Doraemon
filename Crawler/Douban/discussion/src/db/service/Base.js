@@ -5,15 +5,19 @@ class BaseService {
         this.model = model
     }
 
-    create (data) {
-        let action = 'create'
-
-        if (typeOf(data) === 'Array') {
-            action = 'bulkCreate'
-        }
-
+    create (data, options = {}) {
         return new Promise((resolve) => {
-            this.model[action](data).then(result => {
+            this.model.create(data, options).then(result => {
+                resolve([null, result])
+            }).catch(error => {
+                resolve([error])
+            })
+        })
+    }
+
+    bulkCreate (data, options = {}) {
+        return new Promise((resolve) => {
+            this.model.bulkCreate(data, options).then(result => {
                 resolve([null, result])
             }).catch(error => {
                 resolve([error])

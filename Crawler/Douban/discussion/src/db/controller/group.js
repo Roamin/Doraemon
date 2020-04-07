@@ -1,7 +1,7 @@
 const { Group: GroupService } = require('../service')
 
 async function create (data) {
-    const [err, res] = await GroupService.create(data)
+    const [err, res] = await GroupService.bulkCreate(data)
 
     if (err) {
         console.error(err)

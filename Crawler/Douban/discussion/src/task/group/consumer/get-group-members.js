@@ -36,7 +36,7 @@ function getMembers (resolve, url, memberCount = 0) {
 				})
 			})
 
-			const [createError] = await service.User.create(members)
+			const [createError] = await service.User.bulkCreate(members, { ignoreDuplicates: true })
 
 			if (createError) {
 				return resolve([createError])
@@ -44,7 +44,7 @@ function getMembers (resolve, url, memberCount = 0) {
 
 			memberCount += members.length
 
-			console.log(`insert ${members.length} members`)
+			console.log(`${memberCount}: insert ${members.length} members`)
 
 			if ($next.length > 0) {
 				const next = $next.attr('href')

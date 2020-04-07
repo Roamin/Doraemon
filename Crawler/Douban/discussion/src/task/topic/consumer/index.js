@@ -11,10 +11,8 @@ async function consumer (discussion) {
 
     const url = discussion.get('url')
 
+    // 获取话题 Topic 信息，需要返回创建 user
     const [errTopic, resTopic] = await getTopicPageInfo(url)
-    const [errTopicComments, topicComments] = await getTopicComments(url)
-
-    // 如果处理失败
     if (errTopic) {
         await discussion.update({
             status: 'ERROR',
@@ -23,6 +21,9 @@ async function consumer (discussion) {
 
         return
     }
+
+    // 获取话题下面的评论，需要返回创建 users
+    const [errTopicComments, topicComments] = await getTopicComments(url)
     if (errTopicComments) {
         await discussion.update({
             status: 'ERROR',
@@ -35,11 +36,52 @@ async function consumer (discussion) {
     const groupId = discussion.get('groupId')
     const topic = {
         groupId,
-        ...resTopic
+        ...resTopic.topic
     }
 
-    console.log(await service.Topic.create(topic))
-    await service.Comment.create(topicComments)
+    const userMap = {}
+    let users = [resTopic.user, ...topicComments.users]
+
+    // 因为可能出现回复的消息被删除，导致没有用户头像
+    users.forEach(user => {
+        userMap[user.id] = Object.assign(userMap[user.id] || {}, user)
+    })
+
+    users = Object.keys(userMap).map(id => userMap[id])
+
+    // 先创建用户，避免后面 topic、comment 关联失败
+    const [createUsersErr] = await service.User.bulkCreate(users, { ignoreDuplicates: true })
+    if (createUsersErr) {
+        console.log(createUsersErr)
+        await discussion.update({
+            status: 'ERROR',
+            error: createUsersErr.message
+        })
+
+        return
+    }
+
+    const [createTopicsErr] = await service.Topic.bulkCreate([topic], { updateOnDuplicate: ['title', 'text', 'content', 'commentCount', 'likeCount', 'collectCount'] })
+    if (createTopicsErr) {
+        console.log(createTopicsErr)
+        await discussion.update({
+            status: 'ERROR',
+            error: createTopicsErr.message
+        })
+
+        return
+    }
+
+    const [createCommentsErr] = await service.Comment.bulkCreate(topicComments.comments, { ignoreDuplicates: true })
+    if (createCommentsErr) {
+        console.log(createCommentsErr)
+        await discussion.update({
+            status: 'ERROR',
+            error: createCommentsErr.message
+        })
+
+        return
+    }
 
     event.emit('discussion-worker-message', {
         status: 'INSERT_TOPIC',

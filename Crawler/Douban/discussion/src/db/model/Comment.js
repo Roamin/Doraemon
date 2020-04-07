@@ -1,6 +1,7 @@
 const Sequelize = require('sequelize')
 const sequelize = require('../sequelize')
 const User = require('./User')
+const Topic = require('./Topic')
 
 const Comment = sequelize.define('comment', {
     id: {
@@ -12,8 +13,10 @@ const Comment = sequelize.define('comment', {
     topicId: {
         type: Sequelize.STRING,
         allowNull: false,
-        unique: true,
-        primaryKey: true
+        references: {
+            model: Topic,
+            key: 'id'
+        }
     },
     author: {
         type: Sequelize.STRING,

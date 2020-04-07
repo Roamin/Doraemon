@@ -17,9 +17,17 @@ function getTopicPageInfo (url) {
             if (response.statusCode === 200) {
                 const $ = cheerio.load(body)
                 const $richtext = $('.topic-richtext')
+                const $user = $('#topic-content .user-face a')
+
+                const user = {
+                    id: getUrlParam($user.attr('href'), 'people'),
+                    name: $('.from a').text().trim(),
+                    avatar: $user.find('img').attr('src')
+                }
+
 
                 const id = getUrlParam(url, 'topic')
-                const author = getUrlParam($('.from a').attr('href'), 'people')
+                const author = user.id
                 const info = JSON.parse($('script[type^="application"]').html().replace(/\s/g, ''))
 
                 const title = info.name
@@ -30,7 +38,7 @@ function getTopicPageInfo (url) {
                 const collectCount = $('.action-collect .react-num').text().trim() || 0
                 const created = $('.topic-doc .color-green').text().trim()
 
-                resolve([null, {
+                const topic = {
                     id,
                     author,
                     title,
@@ -40,6 +48,11 @@ function getTopicPageInfo (url) {
                     likeCount,
                     collectCount,
                     created
+                }
+
+                resolve([null, {
+                    user,
+                    topic
                 }])
             } else {
                 resolve([new Error(body)])
