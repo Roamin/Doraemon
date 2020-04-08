@@ -3,7 +3,9 @@ const cheerio = require('cheerio')
 const { request: config } = require('../../../config')
 const getUrlParam = require('../../../utils/get-url-param')
 
-function getCommentsFromPage (resolve, url, comments = [], users = [], to) {
+async function getCommentsFromPage (resolve, url, comments = [], users = [], to) {
+    await sleep(10000 + Math.random() * 5000)
+
     request({
         url,
         method: 'GET',
@@ -61,7 +63,9 @@ function getCommentsFromPage (resolve, url, comments = [], users = [], to) {
                 comments.push(comment)
             })
 
-            if (next) return getCommentsFromPage(resolve, next, comments, users, to)
+            if (next) {
+                return getCommentsFromPage(resolve, next, comments, users, to)
+            }
 
             resolve([null, {
                 comments,
