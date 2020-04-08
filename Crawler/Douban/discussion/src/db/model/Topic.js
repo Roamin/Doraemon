@@ -28,31 +28,31 @@ const Topic = sequelize.define('topic', {
     },
     title: {
         type: Sequelize.STRING,
-        allowNull: false,
+        allowNull: false
     },
     text: {
         type: Sequelize.TEXT,
-        allowNull: false,
+        allowNull: false
     },
     content: {
         type: Sequelize.TEXT,
-        allowNull: false,
+        allowNull: false
     },
     commentCount: {
         type: Sequelize.INTEGER,
-        allowNull: false,
+        allowNull: false
     },
     likeCount: {
         type: Sequelize.INTEGER,
-        allowNull: false,
+        allowNull: false
     },
     collectCount: {
         type: Sequelize.INTEGER,
-        allowNull: false,
+        allowNull: false
     },
-    created: {
+    createdAt: {
         type: Sequelize.DATE,
-        allowNull: false,
+        allowNull: false
     }
 }, {
     timestamps: false,

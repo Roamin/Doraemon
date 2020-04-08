@@ -15,7 +15,7 @@ const Discussion = sequelize.define('discussion', {
     },
     status: {
         type: Sequelize.ENUM,
-        values: ['PENDING', 'RUNNING', 'ERROR'],
+        values: ['PENDING', 'RUNNING', 'DONE', 'ERROR'],
         defaultValue: 'PENDING',
         allowNull: false
     },
@@ -30,6 +30,15 @@ const Discussion = sequelize.define('discussion', {
             model: Group,
             key: 'id'
         }
+    },
+    updatedAt: {
+        type: Sequelize.DATE,
+        allowNull: false
+    },
+    loops: { //  遍历次数
+        type: Sequelize.INTEGER,
+        defaultValue: 0,
+        allowNull: true
     }
 }, {
     timestamps: false,

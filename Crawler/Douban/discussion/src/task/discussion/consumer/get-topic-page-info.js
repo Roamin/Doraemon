@@ -16,7 +16,7 @@ function getTopicPageInfo (url) {
 
             if (response.statusCode === 200) {
                 const $ = cheerio.load(body)
-                const $richtext = $('.topic-richtext')
+                const $richtext = $('.topic-content')
                 const $user = $('#topic-content .user-face a')
 
                 const user = {
@@ -24,7 +24,6 @@ function getTopicPageInfo (url) {
                     name: $('.from a').text().trim(),
                     avatar: $user.find('img').attr('src')
                 }
-
 
                 const id = getUrlParam(url, 'topic')
                 const author = user.id
@@ -36,7 +35,7 @@ function getTopicPageInfo (url) {
                 const commentCount = info.commentCount
                 const likeCount = info.interactionStatistic.userInteractionCount
                 const collectCount = $('.action-collect .react-num').text().trim() || 0
-                const created = $('.topic-doc .color-green').text().trim()
+                const createdAt = $('.topic-doc .color-green').text().trim()
 
                 const topic = {
                     id,
@@ -47,7 +46,7 @@ function getTopicPageInfo (url) {
                     commentCount,
                     likeCount,
                     collectCount,
-                    created
+                    createdAt
                 }
 
                 resolve([null, {

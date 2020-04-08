@@ -14,7 +14,7 @@ async function loop () {
     // 如果没有，停止
     if (!discussion) {
         event.emit('discussion-worker-message', {
-            status: 'NO_MORE_DISCUSSION',
+            event: 'NO_MORE_DISCUSSION',
             message: 'No more discussion.'
         })
 
@@ -23,7 +23,7 @@ async function loop () {
 
     consumer(discussion)
 
-    await sleep(2000)
+    await sleep(10000 + Math.random() * 20000)
     loop()
 }
 

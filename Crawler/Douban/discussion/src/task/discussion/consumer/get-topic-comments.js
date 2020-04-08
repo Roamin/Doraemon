@@ -31,7 +31,7 @@ function getCommentsFromPage (resolve, url, comments = [], users = [], to) {
                 const id = $this.attr('id')
                 const author = $this.attr('data-author-id')
                 const content = $this.find('.reply-content').text().trim()
-                const created = $this.find('.pubtime').text().trim()
+                const createdAt = $this.find('.pubtime').text().trim()
 
                 const comment = {
                     id,
@@ -39,7 +39,7 @@ function getCommentsFromPage (resolve, url, comments = [], users = [], to) {
                     author,
                     to,
                     content,
-                    created
+                    createdAt
                 }
 
                 if ($to.length > 0) {

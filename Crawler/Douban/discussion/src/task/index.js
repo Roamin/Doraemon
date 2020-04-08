@@ -1,8 +1,8 @@
 const log = require('../utils/log')
 const event = require('../utils/event')
 const config = require('../config')
-const categoryWorker = require('./category/worker')
-const pageWorker = require('./page/worker')
+const groupWorker = require('./group/worker')
+const discussionWorker = require('./discussion/worker')
 
 const max = config.mysql.POOL.max - 1
 let workerNum = 0
@@ -11,26 +11,26 @@ function registerEventListener (eventName, handler = () => { }) {
     event.on(eventName, handler)
 }
 
-function handleCategoryWorkerEvent ({ status, message }) {
-    log.category.info(`${status}\t${message}`)
+function handleGroupWorkerEvent ({ event, message }) {
+    log.group.info(`${event}\t${message}`)
 
-    // 如果某个分类爬取完成，则唤醒 page worker
-    if (status === 'CATEGORY_DONE' && workerNum < max) {
+    // 如果某个小组爬取完成，则唤醒 discussion worker
+    if (event === 'GROUP_DONE' && workerNum < max) {
         workerNum++
-        log.category.info('load page worker', workerNum)
+        log.group.info('load discussion worker', workerNum)
 
         try {
-            pageWorker()
+            discussionWorker()
         } catch (err) {
             log.exception.info(`Catch Exception:\t${err.message}`)
         }
     }
 }
 
-function handlePageWorkerEvent ({ status, message }) {
-    log.page.info(`${status}\t${message}`)
+function handleDiscussionWorkerEvent ({ event, message }) {
+    log.discussion.info(`${event}\t${message}`)
 
-    if (status === 'NO_MORE_PAGE') {
+    if (event === 'NO_MORE_DISCUSSION') {
         workerNum--
     }
 }
@@ -38,12 +38,12 @@ function handlePageWorkerEvent ({ status, message }) {
 function init () {
     log.schedule.info(`Start task.`)
 
-    registerEventListener('category-worker-message', handleCategoryWorkerEvent)
+    registerEventListener('group-worker-message', handleGroupWorkerEvent)
 
-    registerEventListener('page-worker-message', handlePageWorkerEvent)
+    registerEventListener('discussion-worker-message', handleDiscussionWorkerEvent)
 
     try {
-        categoryWorker()
+        groupWorker()
     } catch (err) {
         log.exception.info(`Catch Exception:\t${err.message}`)
     }

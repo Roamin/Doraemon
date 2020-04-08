@@ -14,7 +14,7 @@ async function loop () {
     // 如果没有，停止
     if (!group) {
         event.emit('group-worker-message', {
-            status: 'NO_MORE_GROUP',
+            event: 'NO_MORE_GROUP',
             message: 'No more group.'
         })
 
@@ -31,7 +31,7 @@ async function loop () {
 
     consumer(url, group)
 
-    await sleep(2000)
+    await sleep(10000 + Math.random() * 20000)
     loop()
 }
 

@@ -1,7 +1,6 @@
 const Sequelize = require('sequelize')
 const sleep = require('../../../utils/sleep')
 const event = require('../../../utils/event')
-const getUrlParam = require('../../../utils/get-url-param')
 const { service } = require('../../../db')
 const getGroupDiscussions = require('./get-group-discussions')
 
@@ -16,31 +15,38 @@ function filterDiscussions (discussions) {
             },
             raw: true
         })
-        // 已存在的 Topic
-        let existedTopics = await service.Topic.findAll({
-            where: {
-                id: {
-                    [Sequelize.Op.or]: discussions.map(discussion => getUrlParam(discussion.url, 'topic'))
-                }
-            },
-            raw: true
-        })
+
 
         existedDiscussions = existedDiscussions || []
-        existedTopics = existedTopics || []
 
         // 如果并没有重复
-        if (existedDiscussions.length === 0 && existedTopics.length === 0) {
+        if (existedDiscussions.length === 0) {
             return resolve(discussions)
         }
 
-        existedDiscussions = existedDiscussions.map(discussion => discussion.url)
-        existedTopics = existedTopics.map(magnet => magnet.origin)
+        const existedDiscussionMap = {}
+        existedDiscussions = existedDiscussions.forEach(discussion => {
+            existedDiscussionMap[discussion.url] = discussion
+        })
 
-        // 已存在的
-        existedDiscussions = existedDiscussions.concat(existedTopics)
+        // 保留未插入的数据
+        // 或者更新时间不一致的
+        let filteredDiscussions = discussions.filter(({ url, updatedAt }) => {
+            const existedDiscussion = existedDiscussionMap[url]
 
-        const filteredDiscussions = discussions.filter(discussion => !existedDiscussions.includes(discussion.url))
+            if (typeof existedDiscussion === 'undefined') {
+                return true
+            }
+
+            return (new Date(existedDiscussion.updatedAt)).getTime() !== (new Date(updatedAt)).getTime()
+        })
+
+        // 增加 status，方便重复数据覆盖 status
+        filteredDiscussions = filteredDiscussions.map(discussion => {
+            discussion.status = 'PENDING'
+
+            return discussion
+        })
 
         resolve(filteredDiscussions)
     })
@@ -69,21 +75,28 @@ async function consumer (url, group) {
 
     // 如果有未存入的数据，则批量插入 discussions
     if (filteredDiscussions.length > 0) {
-        await service.Discussion.bulkCreate(filteredDiscussions)
+        const [bulkCreateError] = await service.Discussion.bulkCreate(filteredDiscussions, { updateOnDuplicate: ['status', 'updatedAt'] })
+
+        if (bulkCreateError) {
+            await group.update({
+                status: 'ERROR',
+                error: bulkCreateError.message
+            })
+        }
 
         event.emit('group-worker-message', {
-            status: 'CREATE_DISCUSSION',
+            event: 'CREATE_DISCUSSION',
             message: `[${group.get('name')}] - ${url} insert ${filteredDiscussions.length} discussions`
         })
     }
 
     const loops = group.get('loops')
-    const hasDuplicate = discussions.length > filteredDiscussions.length
+    const hasDuplicate = filteredDiscussions.length === 0
 
     // 检测是否有重复
     // 如果是第一轮爬取，则忽略碰到重复数据
     if ((!hasDuplicate || loops === 0) && res.next) {
-        await sleep(2000)
+        await sleep(10000 + Math.random() * 20000)
         return consumer(res.next, group)
     }
 
@@ -93,7 +106,7 @@ async function consumer (url, group) {
     })
 
     event.emit('group-worker-message', {
-        status: 'GROUP_DONE',
+        event: 'GROUP_DONE',
         message: `[${loops} => ${loops + 1}] - [${group.get('name')}] done.`
     })
 }

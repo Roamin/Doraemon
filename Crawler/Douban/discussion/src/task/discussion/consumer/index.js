@@ -52,7 +52,6 @@ async function consumer (discussion) {
     // 先创建用户，避免后面 topic、comment 关联失败
     const [createUsersErr] = await service.User.bulkCreate(users, { ignoreDuplicates: true })
     if (createUsersErr) {
-        console.log(createUsersErr)
         await discussion.update({
             status: 'ERROR',
             error: createUsersErr.message
@@ -63,7 +62,6 @@ async function consumer (discussion) {
 
     const [createTopicsErr] = await service.Topic.bulkCreate([topic], { updateOnDuplicate: ['title', 'text', 'content', 'commentCount', 'likeCount', 'collectCount'] })
     if (createTopicsErr) {
-        console.log(createTopicsErr)
         await discussion.update({
             status: 'ERROR',
             error: createTopicsErr.message
@@ -74,7 +72,6 @@ async function consumer (discussion) {
 
     const [createCommentsErr] = await service.Comment.bulkCreate(topicComments.comments, { ignoreDuplicates: true })
     if (createCommentsErr) {
-        console.log(createCommentsErr)
         await discussion.update({
             status: 'ERROR',
             error: createCommentsErr.message
@@ -84,14 +81,18 @@ async function consumer (discussion) {
     }
 
     event.emit('discussion-worker-message', {
-        status: 'INSERT_TOPIC',
-        message: `insert ${topic.title} with ${topicComments.length} comments`
+        event: 'INSERT_TOPIC',
+        message: `insert ${topic.title} with ${topicComments.comments.length} comments`
     })
 
-    // await discussion.destroy()
+    await discussion.update({
+        status: 'DONE',
+        loops: discussion.get('loops') + 1
+    })
+
     event.emit('discussion-worker-message', {
-        status: 'DISCUSSION_DONE',
-        message: `delete discussion: ${url}`
+        event: 'DISCUSSION_DONE',
+        message: `updated discussion: ${discussion.get('title')}`
     })
 }
 

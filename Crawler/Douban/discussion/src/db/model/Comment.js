@@ -36,11 +36,11 @@ const Comment = sequelize.define('comment', {
     },
     content: {
         type: Sequelize.TEXT,
-        allowNull: false,
+        allowNull: false
     },
-    created: {
+    createdAt: {
         type: Sequelize.DATE,
-        allowNull: false,
+        allowNull: false
     }
 }, {
     timestamps: false,
