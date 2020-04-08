@@ -49,7 +49,7 @@ function getMembers (resolve, url, memberCount = 0) {
 			if ($next.length > 0) {
 				const next = $next.attr('href')
 
-				await sleep(10000 + Math.random() * 20000)
+				await sleep(10000 + Math.random() * 5000)
 
 				return getMembers(resolve, next, memberCount)
 			}

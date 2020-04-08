@@ -23,7 +23,7 @@ async function loop () {
 
     consumer(discussion)
 
-    await sleep(10000 + Math.random() * 20000)
+    await sleep(10000 + Math.random() * 5000)
     loop()
 }
 

@@ -31,7 +31,7 @@ async function loop () {
 
     consumer(url, group)
 
-    await sleep(10000 + Math.random() * 20000)
+    await sleep(10000 + Math.random() * 5000)
     loop()
 }
 
