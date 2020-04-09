@@ -24,3 +24,16 @@ new Date(year, month + 1, 0).getDate();
 
 // new Date(2020, 1 + 1, 0).getDate(); // 29
 ```
+
+## 单词匹配(含边界)
+
+```js
+function includeWord (text, word) {
+  const reg = new RegExp(`(?<!\\w)(${word})(?!\\w)`, 'i') // 示例是大小写不敏感
+
+  return reg.test(text)
+}
+
+includeWord('mobile_number', 'mobile') // false
+includeWord('mobile number', 'mobile') // true
+```
