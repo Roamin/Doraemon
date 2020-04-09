@@ -2,9 +2,10 @@ const request = require('request')
 const cheerio = require('cheerio')
 const { request: config } = require('../../../config')
 const getUrlParam = require('../../../utils/get-url-param')
+const sleep = require('../../../utils/sleep')
 
 async function getCommentsFromPage (resolve, url, comments = [], users = [], to) {
-    await sleep(10000 + Math.random() * 5000)
+    await sleep(10000 + Math.random() * 20000)
 
     request({
         url,

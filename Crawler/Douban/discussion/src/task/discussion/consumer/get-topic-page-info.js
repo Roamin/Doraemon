@@ -27,7 +27,7 @@ function getTopicPageInfo (url) {
 
                 const id = getUrlParam(url, 'topic')
                 const author = user.id
-                const info = JSON.parse($('script[type^="application"]').html().replace(/\s/g, ''))
+                const info = JSON.parse($('script[type^="application"]').html().replace(/\s/g, '').replace(/("text":"[^"]+",)/g, ''))
 
                 const title = info.name
                 const text = $richtext.text().trim()
