@@ -1,5 +1,4 @@
 const { service } = require('../../db')
-const sleep = require('../../utils/sleep')
 const event = require('../../utils/event')
 const consumer = require('./consumer')
 
@@ -31,7 +30,6 @@ async function loop () {
 
     consumer(url, group)
 
-    await sleep(10000 + Math.random() * 20000)
     loop()
 }
 

@@ -1,5 +1,4 @@
 const Sequelize = require('sequelize')
-const sleep = require('../../../utils/sleep')
 const event = require('../../../utils/event')
 const { service } = require('../../../db')
 const getGroupDiscussions = require('./get-group-discussions')
@@ -96,7 +95,6 @@ async function consumer (url, group) {
     // 检测是否有重复
     // 如果是第一轮爬取，则忽略碰到重复数据
     if ((!hasDuplicate || loops === 0) && res.next) {
-        await sleep(10000 + Math.random() * 20000)
         return consumer(res.next, group)
     }
 

@@ -1,3 +1,5 @@
+const sleep = require('../utils/sleep')
+
 const userAgents = [
     'Mozilla/5.0 (X11; U; Linux i686; en-US; rv:1.8.0.12) Gecko/20070731 Ubuntu/dapper-security Firefox/1.5.0.12',
     'Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 6.0; Acoo Browser; SLCC1; .NET CLR 2.0.50727; Media Center PC 5.0; .NET CLR 3.0.04506)',
@@ -20,11 +22,44 @@ const userAgents = [
     'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/61.0.3163.100 Safari/537.36'
 ]
 
+const ips = [
+    { protocol: 'http', hostname: '51.79.159.47', port: '8080' },
+    { protocol: 'http', hostname: '221.122.91.60', port: '80' },
+    { protocol: 'http', hostname: '221.122.91.60', port: '80' },
+    { protocol: 'http', hostname: '221.122.91.66', port: '80' },
+    { protocol: 'http', hostname: '180.183.121.43', port: '8080' }
+]
+function proxy () {
+    return new Promise(async resolve => {
+        let now = Date.now()
+
+        let ipIndex = ips.findIndex((item) => {
+            if (typeof item.updateTime === 'undefined') return true
+
+            return now - item.updateTime > 60000
+        })
+
+        if (ipIndex === -1) {
+            await sleep(8000)
+
+            ipIndex = 0
+            now = Date.now()
+        }
+
+        ips[ipIndex].updateTime = now
+
+        const { hostname, port, protocol } = ips[ipIndex]
+
+        resolve(`${protocol}://${hostname}:${port}`)
+    })
+}
+
 module.exports = {
     headers () {
         return {
             'Content-Type': `application/x-www-form-urlencoded`,
             'User-Agent': userAgents[parseInt(Math.random() * userAgents.length)]
         }
-    }
+    },
+    proxy
 }

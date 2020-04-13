@@ -17,43 +17,52 @@ function getUpdatedAt (time) {
 }
 
 function getGroupDiscussions (url) {
-	return new Promise(resolve => {
+	return new Promise(async resolve => {
 		request({
 			url,
 			method: 'GET',
-			headers: config.headers()
+			headers: config.headers(),
+			proxy: await config.proxy()
 		}, (error, response, body) => {
 			if (error) {
 				return resolve([error])
 			}
 
 			if (response.statusCode === 200) {
-				const $ = cheerio.load(body)
-				const $discussions = $('.olt .title a')
-				const $next = $('.paginator .next a')
-				const discussions = []
-				let next = false
+				try {
+					const $ = cheerio.load(body)
+					const $discussions = $('.olt .title a')
+					const $next = $('.paginator .next a')
+					const discussions = []
+					let next = false
 
-				$discussions.each(function () {
-					const $this = $(this)
-					const href = $this.attr('href')
-					const time = $this.parent().parent().find('.time').text().trim()
+					if ($discussions.length === 0) {
+						resolve([new Error('getGroupDiscussions parse error')])
+					}
 
-					discussions.push({
-						title: $this.text().trim(),
-						url: href,
-						updatedAt: getUpdatedAt(time)
+					$discussions.each(function () {
+						const $this = $(this)
+						const href = $this.attr('href')
+						const time = $this.parent().parent().find('.time').text().trim()
+
+						discussions.push({
+							title: $this.text().trim(),
+							url: href,
+							updatedAt: getUpdatedAt(time)
+						})
 					})
-				})
 
-				if ($next.length > 0) {
-					next = $next.attr('href')
+					if ($next.length > 0) {
+						next = $next.attr('href')
+					}
+
+					resolve([null, {
+						next,
+						discussions
+					}])
+				} catch (err) {
+					return resolve([err])
 				}
-
-				resolve([null, {
-					next,
-					discussions
-				}])
 			} else {
 				resolve([new Error(body)])
 			}
