@@ -1,3 +1,4 @@
+const request = require('request')
 const sleep = require('../utils/sleep')
 
 const userAgents = [
@@ -22,21 +23,63 @@ const userAgents = [
     'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/61.0.3163.100 Safari/537.36'
 ]
 
-const ips = [
-    { protocol: 'http', hostname: '51.79.159.47', port: '8080' },
-    { protocol: 'http', hostname: '221.122.91.60', port: '80' },
-    { protocol: 'http', hostname: '221.122.91.60', port: '80' },
-    { protocol: 'http', hostname: '221.122.91.66', port: '80' },
-    { protocol: 'http', hostname: '180.183.121.43', port: '8080' }
-]
+let recordsCache = {}
+
+function getProxies () {
+    return new Promise(resolve => {
+        request({
+            url: 'http://localhost:8321/api/proxy/list',
+            method: 'GET',
+        }, (error, response, body) => {
+            if (error) {
+                return resolve([error])
+            }
+
+            if (response.statusCode === 200) {
+                try {
+                    const { data } = JSON.parse(body)
+
+                    resolve([null, data])
+                } catch (e) {
+                    resolve([e])
+                }
+            } else {
+                resolve([new Error(body)])
+            }
+        })
+    })
+}
+
+function getProxyUrl ({ hostname, port, protocol }) {
+    return `${protocol}://${hostname}:${port}`
+}
+
 function proxy () {
     return new Promise(async resolve => {
         let now = Date.now()
+        const records = {}
+        const [err, proxies = []] = await getProxies()
 
-        let ipIndex = ips.findIndex((item) => {
-            if (typeof item.updateTime === 'undefined') return true
+        if (err) {
+            console.error(err)
+        } else if (proxies.length === 0) {
+            await sleep(8000)
+        }
 
-            return now - item.updateTime > 60000
+        proxies.forEach(proxy => {
+            const url = getProxyUrl(proxy)
+
+            records[url] = recordsCache[url]
+        })
+
+        recordsCache = records
+
+        let ipIndex = proxies.findIndex((proxy) => {
+            const record = recordsCache[getProxyUrl(proxy)]
+
+            if (typeof record === 'undefined') return true
+
+            return now - record > 60000
         })
 
         if (ipIndex === -1) {
@@ -46,11 +89,11 @@ function proxy () {
             now = Date.now()
         }
 
-        ips[ipIndex].updateTime = now
+        recordsCache[getProxyUrl(proxies[ipIndex])] = now
 
-        const { hostname, port, protocol } = ips[ipIndex]
+        const url = getProxyUrl(proxies[ipIndex])
 
-        resolve(`${protocol}://${hostname}:${port}`)
+        resolve(url)
     })
 }
 
