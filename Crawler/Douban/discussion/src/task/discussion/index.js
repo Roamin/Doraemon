@@ -12,6 +12,7 @@ async function loop () {
 
     // 如果没有，停止
     if (!discussion) {
+        console.log('NO_MORE_DISCUSSION')
         event.emit('discussion-worker-message', {
             event: 'NO_MORE_DISCUSSION',
             message: 'No more discussion.'
@@ -20,7 +21,9 @@ async function loop () {
         return
     }
 
-    await consumer(discussion)
+    const [err] = await consumer(discussion)
+
+    if (err) console.error(err)
 
     loop()
 }

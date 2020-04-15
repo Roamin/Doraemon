@@ -1,11 +1,9 @@
+const Sequelize = require('sequelize')
 const { service, model } = require('../../db')
 
 function reset () {
     return new Promise(async resolve => {
         let groups = await service.Group.findAll({
-            where: {
-                status: 'DONE'
-            },
             raw: true
         })
 
@@ -13,13 +11,14 @@ function reset () {
 
         groups = groups.map(group => {
             group.status = 'PENDING'
+            group.error = null
 
             return group
         })
 
         if (groups) {
             await model.Group.bulkCreate(groups, {
-                updateOnDuplicate: ['status']
+                updateOnDuplicate: ['status', 'error']
             })
         }
 
