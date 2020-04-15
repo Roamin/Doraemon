@@ -21,9 +21,7 @@ async function loop () {
         return
     }
 
-    const [err] = await consumer(discussion)
-
-    if (err) console.error(err)
+    await consumer(discussion)
 
     loop()
 }

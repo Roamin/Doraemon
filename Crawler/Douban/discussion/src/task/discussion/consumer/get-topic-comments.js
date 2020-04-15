@@ -1,83 +1,71 @@
-const request = require('request')
-const cheerio = require('cheerio')
-const { request: config } = require('../../../config')
+const fetch = require('../../../utils/fetch')
 const getUrlParam = require('../../../utils/get-url-param')
 
 async function getCommentsFromPage (resolve, url, comments = [], users = [], to) {
-    request({
-        url,
-        method: 'GET',
-        headers: config.headers(),
-        proxy: await config.proxy()
-    }, (error, response, body) => {
-        if (error) {
-            return resolve([error])
-        }
+    const [fetchErr, $] = await fetch(url)
 
-        if (response.statusCode === 200) {
-            try {
-                const $ = cheerio.load(body)
-                const $comments = $('#comments .comment-item')
-                const $next = $('.next a')
+    if (fetchErr) {
+        return resolve([fetchErr])
+    }
 
-                const topicId = getUrlParam(url, 'topic')
-                const next = $next.length > 0 ? $next.attr('href') : false
+    try {
+        const $comments = $('#comments .comment-item')
+        const $next = $('.next a')
 
-                to = to ? to : getUrlParam($('#topic-content .user-face a').attr('href'), 'people')
+        const topicId = getUrlParam(url, 'topic')
+        const next = $next.length > 0 ? $next.attr('href') : false
 
-                $comments.each(function () {
-                    const $this = $(this)
-                    const $to = $this.find('.reply-quote .reply-quote-content .pubdate a')
-                    const $user = $this.find('.user-face img')
+        to = to ? to : getUrlParam($('#topic-content .user-face a').attr('href'), 'people')
 
-                    const id = $this.attr('id')
-                    const author = $this.attr('data-author-id')
-                    const content = $this.find('.reply-content').text().trim()
-                    const createdAt = $this.find('.pubtime').text().trim()
+        $comments.each(function () {
+            const $this = $(this)
+            const $to = $this.find('.reply-quote .reply-quote-content .pubdate a')
+            const $user = $this.find('.user-face img')
 
-                    const comment = {
-                        id,
-                        topicId,
-                        author,
-                        to,
-                        content,
-                        createdAt
-                    }
+            const id = $this.attr('id')
+            const author = $this.attr('data-author-id')
+            const content = $this.find('.reply-content').text().trim()
+            const createdAt = $this.find('.pubtime').text().trim()
 
-                    if ($to.length > 0) {
-                        const toUser = {
-                            id: getUrlParam($to.attr('href'), 'people'),
-                            name: $to.text().trim()
-                        }
+            const comment = {
+                id,
+                topicId,
+                author,
+                to,
+                content,
+                createdAt
+            }
 
-                        comment.to = toUser.id
-                        users.push(toUser)
-                    }
-
-                    users.push({
-                        id: author,
-                        name: $user.attr('alt').trim(),
-                        avatar: $user.attr('src')
-                    })
-
-                    comments.push(comment)
-                })
-
-                if (next) {
-                    return getCommentsFromPage(resolve, next, comments, users, to)
+            if ($to.length > 0) {
+                const toUser = {
+                    id: getUrlParam($to.attr('href'), 'people'),
+                    name: $to.text().trim()
                 }
 
-                resolve([null, {
-                    comments,
-                    users
-                }])
-            } catch (err) {
-                resolve([err])
+                comment.to = toUser.id
+                users.push(toUser)
             }
-        } else {
-            resolve([new Error(body)])
+
+            users.push({
+                id: author,
+                name: $user.attr('alt').trim(),
+                avatar: $user.attr('src')
+            })
+
+            comments.push(comment)
+        })
+
+        if (next) {
+            return getCommentsFromPage(resolve, next, comments, users, to)
         }
-    })
+
+        resolve([null, {
+            comments,
+            users
+        }])
+    } catch (parseErr) {
+        resolve([parseErr])
+    }
 }
 
 function getTopicComments (url) {

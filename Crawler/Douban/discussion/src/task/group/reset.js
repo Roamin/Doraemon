@@ -11,7 +11,7 @@ function reset () {
 
         groups = groups.map(group => {
             group.status = 'PENDING'
-            group.error = null
+            group.error = ''
 
             return group
         })
