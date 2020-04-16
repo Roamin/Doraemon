@@ -6,21 +6,17 @@ let recordsCache = {}
 function getProxies () {
     return new Promise(resolve => {
         axios.get('http://localhost:8321/api/proxy/list').then(res => {
-            try {
-                const data = (res.data.data || []).map(proxy => {
-                    return {
-                        ...proxy,
-                        key: JSON.stringify(proxy)
-                    }
-                })
+            const data = (res.data.data || []).map(proxy => {
+                proxy.port = parseInt(proxy.port)
+                proxy.key = JSON.stringify(proxy)
 
-                // Random
-                data.sort(() => Math.random() - 0.5)
+                return proxy
+            })
 
-                resolve([null, data])
-            } catch (e) {
-                resolve([e])
-            }
+            // Random
+            data.sort(() => Math.random() - 0.5)
+
+            resolve([null, data])
         }).catch(err => {
             resolve([new Error(err.code)])
         })
@@ -36,13 +32,13 @@ module.exports = function getProxy () {
         if (err) {
             console.error('Get proxy failed:', err)
 
-            return resolve(null)
+            return resolve(false)
         }
 
         if (proxies.length === 0) {
             console.error('Proxy pool is empty')
 
-            return resolve(null)
+            return resolve(false)
         }
 
         // record
@@ -75,8 +71,6 @@ module.exports = function getProxy () {
         const { protocol, hostname: host, port, key } = proxies[ipIndex]
 
         recordsCache[key] = now
-
-        console.log(recordsCache)
 
         resolve({
             protocol,

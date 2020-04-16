@@ -1,16 +1,16 @@
 const axios = require('axios')
-const axiosRetry = require('axios-retry')
+// const axiosRetry = require('axios-retry')
 const cheerio = require('cheerio')
 
 const userAgents = require('./user-agents')
 const getProxy = require('./get-proxy')
 
-axiosRetry(axios, {
-    retries: 3,
-    // retryDelay: (retryCount) => {
-    //     return retryCount * 1000
-    // }
-})
+// axiosRetry(axios, {
+//     retries: 3,
+//     // retryDelay: (retryCount) => {
+//     //     return retryCount * 1000
+//     // }
+// })
 
 function getCookie () {
     const str = Math.random().toString(36).substr(2) + Math.random().toString(36).substr(2)
@@ -38,6 +38,7 @@ module.exports = (url) => {
 
         fetch(url).then(res => {
             try {
+                console.log(res.data)
                 const $ = cheerio.load(res.data)
 
                 resolve([null, $])

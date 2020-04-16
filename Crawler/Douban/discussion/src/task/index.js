@@ -17,13 +17,10 @@ function handleGroupWorkerEvent ({ event, message }) {
     // 如果某个小组爬取完成，则唤醒 discussion worker
     if (event === 'GROUP_DONE' && workerNum < max) {
         workerNum++
+
         log.group.info('load discussion worker', workerNum)
 
-        try {
-            discussionWorker()
-        } catch (err) {
-            log.exception.info(`Catch Exception:\t${err.message}`)
-        }
+        discussionWorker()
     }
 }
 
@@ -42,11 +39,7 @@ function init () {
 
     registerEventListener('discussion-worker-message', handleDiscussionWorkerEvent)
 
-    try {
-        groupWorker()
-    } catch (err) {
-        log.exception.info(`Catch Exception:\t${err.message}`)
-    }
+    groupWorker()
 }
 
 module.exports = init
