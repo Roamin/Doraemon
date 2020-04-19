@@ -1,5 +1,6 @@
 const { service } = require('../../db')
 const event = require('../../utils/event')
+const sleep = require('../../utils/sleep')
 const consumer = require('./consumer')
 
 async function loop () {
@@ -12,7 +13,6 @@ async function loop () {
 
     // 如果没有，停止
     if (!discussion) {
-        console.log('NO_MORE_DISCUSSION')
         event.emit('discussion-worker-message', {
             event: 'NO_MORE_DISCUSSION',
             message: 'No more discussion.'
@@ -21,8 +21,15 @@ async function loop () {
         return
     }
 
-    await consumer(discussion)
+    const [err] = await consumer(discussion)
+    if (err) {
+        console.error('consumer error:', err.message)
+    } else {
+        console.clear()
+        console.log('done')
+    }
 
+    await sleep(Math.random() * 5000)
     loop()
 }
 

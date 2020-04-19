@@ -1,5 +1,5 @@
-const { service, model } = require('../../db')
-const getGroupMembers = require('./consumer/get-group-members')
+const { service } = require('../../db')
+const getGroupMembers = require('./get-group-members')
 
 async function members () {
     // 找一条待处理数据

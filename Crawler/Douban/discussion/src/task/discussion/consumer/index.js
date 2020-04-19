@@ -13,7 +13,7 @@ function consumer (discussion) {
         const url = discussion.get('url')
 
         // 获取话题 Topic 信息，需要返回创建 user
-        const [errTopic, resTopic] = await getTopicPageInfo(url)
+        const [errTopic, resTopic, $topicPage] = await getTopicPageInfo(url)
         if (errTopic) {
             await discussion.update({
                 status: 'ERROR',
@@ -24,7 +24,7 @@ function consumer (discussion) {
         }
 
         // 获取话题下面的评论，需要返回创建 users
-        const [errTopicComments, topicComments] = await getTopicComments(url)
+        const [errTopicComments, topicComments] = await getTopicComments(url, $topicPage)
         if (errTopicComments) {
             await discussion.update({
                 status: 'ERROR',

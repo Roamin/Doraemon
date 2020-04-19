@@ -1,24 +1,31 @@
-const axios = require('axios')
+const request = require('request')
 const sleep = require('../../utils/sleep')
 
 let recordsCache = {}
 
 function getProxies () {
     return new Promise(resolve => {
-        axios.get('http://localhost:8321/api/proxy/list').then(res => {
-            const data = (res.data.data || []).map(proxy => {
-                proxy.port = parseInt(proxy.port)
-                proxy.key = JSON.stringify(proxy)
+        request('http://localhost:8321/api/proxy/list', (error, response, body) => {
+            if (error) {
+                return resolve([error])
+            }
 
-                return proxy
-            })
+            if (response && response.statusCode === 200) {
+                const res = JSON.parse(body)
+                const data = (res.data || []).map(proxy => {
+                    proxy.port = parseInt(proxy.port)
+                    proxy.key = JSON.stringify(proxy)
 
-            // Random
-            data.sort(() => Math.random() - 0.5)
+                    return proxy
+                })
 
-            resolve([null, data])
-        }).catch(err => {
-            resolve([new Error(err.code)])
+                // Random
+                data.sort(() => Math.random() - 0.5)
+
+                resolve([null, data])
+            } else {
+                return resolve([new Error(`STATUS_CODE: ${response.statusCode || 'UNKNOWN_CODE'}`)])
+            }
         })
     })
 }
@@ -57,25 +64,21 @@ module.exports = function getProxy () {
             if (typeof record === 'undefined') return true
 
             // 10s
-            return now - record > 10000
+            return now - record > 5000
         })
 
         if (ipIndex === -1) {
             console.log('sleep')
-            await sleep(10000)
+            await sleep(5000)
 
             ipIndex = 0
             now = Date.now()
         }
 
-        const { protocol, hostname: host, port, key } = proxies[ipIndex]
+        const { protocol, hostname, port, key } = proxies[ipIndex]
 
         recordsCache[key] = now
 
-        resolve({
-            protocol,
-            host,
-            port
-        })
+        resolve(`${protocol}://${hostname}:${port}`)
     })
 }

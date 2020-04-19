@@ -1,16 +1,9 @@
-const axios = require('axios')
-// const axiosRetry = require('axios-retry')
+const request = require('request')
 const cheerio = require('cheerio')
 
 const userAgents = require('./user-agents')
 const getProxy = require('./get-proxy')
-
-// axiosRetry(axios, {
-//     retries: 3,
-//     // retryDelay: (retryCount) => {
-//     //     return retryCount * 1000
-//     // }
-// })
+const sleep = require('../sleep')
 
 function getCookie () {
     const str = Math.random().toString(36).substr(2) + Math.random().toString(36).substr(2)
@@ -20,13 +13,15 @@ function getCookie () {
     return `bid=${bid}`
 }
 
+
 module.exports = (url) => {
     return new Promise(async resolve => {
         const proxy = await getProxy()
-        console.log(proxy)
-        const fetch = axios.create({
-            timeout: 10000, // ms
+
+        const options = {
+            url,
             headers: {
+                'Content-Type': `application/x-www-form-urlencoded`,
                 'User-Agent': userAgents(),
                 'Accept': '*/*',
                 'Connection': 'keep-alive',
@@ -34,21 +29,24 @@ module.exports = (url) => {
                 'Cookie': getCookie()
             },
             proxy
-        })
+        }
 
-        fetch(url).then(res => {
-            try {
-                console.log(res.data)
-                const $ = cheerio.load(res.data)
-
-                resolve([null, $])
-
-            } catch (e) {
-                resolve([e])
+        request(options, (error, response, body) => {
+            if (error) {
+                return resolve([error])
             }
 
-        }).catch(error => {
-            resolve([new Error(error.code)])
+            if (response && response.statusCode === 200) {
+                if (body.indexOf('杭州') !== -1) {
+                    const $ = cheerio.load(body)
+
+                    return resolve([null, $])
+                } else {
+                    return resolve([new Error('PROXY_ERROR')])
+                }
+            } else {
+                return resolve([new Error(`STATUS_CODE: ${response.statusCode || 'UNKNOWN_CODE'}`)])
+            }
         })
     })
 }

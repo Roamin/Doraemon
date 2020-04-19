@@ -4,7 +4,7 @@ const sleep = require('../../utils/sleep')
 async function init (limits = 5) {
     for (let i = 0; i < limits; i++) {
         loop()
-        await sleep(1000)
+        await sleep(Math.random() * 5000)
     }
 }
 
