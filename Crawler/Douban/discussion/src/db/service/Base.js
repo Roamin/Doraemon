@@ -29,6 +29,10 @@ class BaseService {
         return this.model.findOne(...args)
     }
 
+    count (...args) {
+        return this.model.count(...args)
+    }
+
     findAll (...args) {
         return this.model.findAll(...args)
     }

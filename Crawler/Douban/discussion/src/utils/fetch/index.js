@@ -3,6 +3,7 @@ const cheerio = require('cheerio')
 
 const userAgents = require('./user-agents')
 const getProxy = require('./get-proxy')
+const deleteProxy = require('./delete-proxy')
 const sleep = require('../sleep')
 
 function getCookie () {
@@ -13,11 +14,19 @@ function getCookie () {
     return `bid=${bid}`
 }
 
+// const proxies = [
+//     'http://218.2.226.42:80',
+//     'http://153.35.185.69:80',
+//     'http://123.139.56.238:9999',
+//     'http://35.184.36.190:80',
+//     'http://61.220.204.25:3128',
+//     'http://36.22.208.248:8118'
+// ]
 
-module.exports = (url) => {
+module.exports = (url, { hostname, port, protocol }) => {
+    const proxy = `${protocol}://${hostname}:${port}`
+
     return new Promise(async resolve => {
-        const proxy = await getProxy()
-
         const options = {
             url,
             headers: {
@@ -31,13 +40,15 @@ module.exports = (url) => {
             proxy
         }
 
-        request(options, (error, response, body) => {
+        request(options, async (error, response, body) => {
             if (error) {
+                console.log('del', proxy)
+                // await deleteProxy(proxy)
                 return resolve([error])
             }
 
             if (response && response.statusCode === 200) {
-                if (body.indexOf('杭州') !== -1) {
+                if (body.indexOf('个人主页') !== -1) {
                     const $ = cheerio.load(body)
 
                     return resolve([null, $])
@@ -45,6 +56,8 @@ module.exports = (url) => {
                     return resolve([new Error('PROXY_ERROR')])
                 }
             } else {
+                console.log('del', proxy)
+                // await deleteProxy(proxy)
                 return resolve([new Error(`STATUS_CODE: ${response.statusCode || 'UNKNOWN_CODE'}`)])
             }
         })

@@ -2,6 +2,8 @@ const { service } = require('../../db')
 const fetch = require('../../utils/fetch')
 const getUrlParam = require('../../utils/get-url-param')
 
+// https://m.douban.com/people/34152743/
+
 async function getMembers (resolve, url, memberCount = 0) {
 	const [fetchErr, $] = await fetch(url)
 
